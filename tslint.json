@@ -7,13 +7,15 @@
   "jsRules": {
     "eofline": true,
     "object-literal-sort-keys": false,
-    "align": false
+    "align": false,
+    "ter-arrow-parens": [true, "as-needed"]
   },
   "rules": {
     "import-name": false,
     "object-literal-sort-keys": false,
     "align": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "ter-arrow-parens": [true, "as-needed"]
   },
   "rulesDirectory": []
 }
