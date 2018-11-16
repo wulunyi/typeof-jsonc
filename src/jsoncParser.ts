@@ -6,6 +6,7 @@ import MapSet from './mapSet';
 import * as helper from './helper';
 import * as jsoncComment from './commentParser';
 import { HalfCreateTypeFn, StackNode, CanAddCommentNode } from './types';
+import { mergeInterfaceDec } from './mergeDec';
 
 export default function parser(
   jsonc: string,
@@ -19,6 +20,7 @@ export default function parser(
   const dtsStack: StackNode[] = [];
   const comments: string[] = [];
   const arrItemMap = new MapSet<dtsDom.Type>();
+  const arrItemIMap = new MapSet<dtsDom.InterfaceDeclaration>();
   const commentsMap = new MapSet<string>();
 
   // 辅助函数
@@ -75,7 +77,13 @@ export default function parser(
     },
     onObjectEnd(...params) {
       walkOffset(...params);
-      result.push(dtsStack.pop() as dtsDom.InterfaceDeclaration);
+      const topNode = dtsStack.pop() as dtsDom.InterfaceDeclaration;
+
+      if (helper.isArrCreateNode(helper.topItem(dtsStack))) {
+        arrItemIMap.add(helper.topItem(dtsStack), topNode);
+      } else {
+        result.push(topNode);
+      }
     },
 
     onArrayBegin(...params) {
@@ -130,6 +138,13 @@ export default function parser(
           (topNode as dtsDom.InterfaceDeclaration).members.push(
             nodeType as dtsDom.PropertyDeclaration,
           );
+        }
+
+        // merge array object Item
+        const arrItemIList = arrItemIMap.get(createTypeFn);
+
+        if (arrItemIList.length > 0) {
+          result.push(mergeInterfaceDec(arrItemIList));
         }
       }
     },
