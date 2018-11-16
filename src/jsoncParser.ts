@@ -10,7 +10,7 @@ import { mergeInterfaceDec } from './mergeDec';
 
 export default function parser(
   jsonc: string,
-  name: string = 'RootType',
+  name: string,
 ): dtsDom.TopLevelDeclaration[] {
   const result: dtsDom.TopLevelDeclaration[] = [];
 

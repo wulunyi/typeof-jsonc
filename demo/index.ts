@@ -8,4 +8,4 @@ const text = fs.readFileSync(path.resolve('./demo/test.jsonc'), {
 });
 
 /* tslint:disable */
-console.log(typeofJsonc(text));
+console.log(typeofJsonc(text, 'IResponse', { rootFlags: 1 }));
