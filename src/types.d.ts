@@ -1,10 +1,7 @@
 import * as dtsDom from 'dts-dom';
+import ArrayType from './arrayType';
 
-export type HalfCreateTypeFn = (
-  type: dtsDom.Type,
-) => dtsDom.PropertyDeclaration | dtsDom.ArrayTypeReference;
-
-export type StackNode = dtsDom.InterfaceDeclaration | HalfCreateTypeFn;
+export type StackNode = dtsDom.InterfaceDeclaration | ArrayType;
 
 export type CanAddCommentNode =
   | dtsDom.PropertyDeclaration

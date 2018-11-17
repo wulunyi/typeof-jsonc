@@ -20,15 +20,22 @@
         "operUser": "ge",
         "ctime": 1540225950, //创建时间
         "utime": 1540225950, //修改时间
-        "poiList": [{
-          "wmPoiId": 122,
-          "wmPoiName": "ttt"
-        }, {
-          "wmPoiId": 122
-        }, {
-          "wmPoiId": 122,
-          "wmPoiName": 122
-        }]
+        "poiList": [
+          // name
+          {
+            // id
+            "wmPoiId": 122,
+            // name
+            "wmPoiName": "ttt"
+          },
+          // id
+          {
+            "wmPoiId": 122
+          }, {
+            "wmPoiId": 122,
+            "wmPoiName": 122
+          }
+        ]
       }
     ],
     "poiList": [{

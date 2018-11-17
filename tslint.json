@@ -1,14 +1,12 @@
 {
   "defaultSeverity": "error",
-  "extends": [
-    "tslint:recommended",
-    "tslint-config-airbnb"
-  ],
+  "extends": ["tslint:recommended", "tslint-config-airbnb"],
   "jsRules": {
     "eofline": true,
     "object-literal-sort-keys": false,
     "align": false,
-    "ter-arrow-parens": [true, "as-needed"]
+    "ter-arrow-parens": [true, "as-needed"],
+    "quotemark": [true, "single"]
   },
   "rules": {
     "import-name": false,
@@ -17,5 +15,8 @@
     "ordered-imports": false,
     "ter-arrow-parens": [true, "as-needed"]
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["./lib"]
+  }
 }
