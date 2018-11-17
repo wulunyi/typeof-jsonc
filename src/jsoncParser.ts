@@ -1,15 +1,16 @@
 import * as dtsDom from 'dts-dom';
-import { visit, ParseErrorCode } from 'jsonc-parser';
-import MapSet from './mapSet';
+import { visit, ParseErrorCode, ParseOptions } from 'jsonc-parser';
 import * as helper from './helper';
 import * as jsoncComment from './commentParser';
-import { HalfCreateTypeFn, StackNode, CanAddCommentNode } from './types';
+import { StackNode, CanAddCommentNode } from './types';
 import { mergeInterfaceDec } from './mergeDec';
 import SingleName from './singleName';
+import ArrayType from './arrayType';
 
 export default function parser(
   jsonc: string,
   name: string,
+  options?: ParseOptions,
 ): dtsDom.TopLevelDeclaration[] {
   const result: dtsDom.TopLevelDeclaration[] = [];
 
@@ -18,9 +19,6 @@ export default function parser(
   const nameStack: string[] = [name];
   const dtsStack: StackNode[] = [];
   const comments: string[] = [];
-  const arrItemMap = new MapSet<dtsDom.Type>();
-  const arrItemIMap = new MapSet<dtsDom.InterfaceDeclaration>();
-  const commentsMap = new MapSet<string>();
   const singleTypeName = new SingleName();
 
   // 辅助函数
@@ -28,10 +26,14 @@ export default function parser(
     preOffset = helper.add(...params);
   }
 
+  function popAllComments() {
+    return comments.splice(0, comments.length);
+  }
+
   function addComment<T extends CanAddCommentNode>(node: T): T {
     if (!helper.isEmpty(comments)) {
       node.jsDocComment = [node.jsDocComment || '']
-        .concat(comments.splice(0, comments.length))
+        .concat(popAllComments())
         .filter(coment => !!coment)
         .join('\n');
     }
@@ -39,174 +41,193 @@ export default function parser(
     return node;
   }
 
-  visit(jsonc, {
-    onObjectBegin(...params) {
-      walkOffset(...params);
+  function walkTopDts(handler: {
+    onGenArrTypeFn: (dts: ArrayType) => void;
+    onDts: (dts: dtsDom.InterfaceDeclaration) => void;
+  }) {
+    if (!helper.isEmpty(dtsStack)) {
+      const topDts = helper.topItem(dtsStack);
 
-      const objName = helper.topItem(nameStack);
-      const caseObjName = singleTypeName.getUnicodeName(
-        objName,
-        helper.whetherTopIsArr(dtsStack),
-      );
-      const objDts = dtsDom.create.interface(caseObjName);
+      if (helper.isArrCreateNode(topDts)) {
+        handler.onGenArrTypeFn(topDts);
+      } else if (helper.isInterfaceNode(topDts)) {
+        handler.onDts(topDts);
+      }
+    }
+  }
 
-      if (!helper.isEmpty(dtsStack)) {
-        const topNode = helper.topItem(dtsStack);
+  function getName(): string {
+    if (!helper.isEmpty(dtsStack)) {
+      const topDts = helper.topItem(dtsStack);
 
-        if (helper.isArrCreateNode(topNode)) {
-          // 对于数组对象元素有注释，则对象加上注释，且数组属性加上注释
-          if (comments.length > 0) {
-            objDts.jsDocComment = comments.join('\n');
-          }
-
-          // 将类型名推入数组选项中
-          arrItemMap.add(topNode, caseObjName as dtsDom.Type);
-          // 将注释推入数组注释列表中
-          commentsMap.add(
-            topNode,
-            comments.splice(0, comments.length).join('\n'),
-          );
-        } else if (helper.isInterfaceNode(topNode)) {
-          (topNode as dtsDom.InterfaceDeclaration).members.push(
-            addComment(
-              dtsDom.create.property(objName, caseObjName as dtsDom.Type),
-            ),
-          );
-        }
+      if (topDts && helper.isArrCreateNode(topDts)) {
+        return topDts.name;
       }
 
-      // 推入 interface
-      dtsStack.push(objDts);
-    },
-    onObjectEnd(...params) {
-      walkOffset(...params);
-      const topNode = dtsStack.pop() as dtsDom.InterfaceDeclaration;
+      return nameStack.pop()!;
+    }
 
-      if (helper.isArrCreateNode(helper.topItem(dtsStack))) {
-        arrItemIMap.add(helper.topItem(dtsStack), topNode);
-      } else {
-        result.push(topNode);
+    return nameStack.pop()!;
+  }
+
+  function getCaseName(pName: string): string {
+    if (!helper.isEmpty(dtsStack)) {
+      const topDts = helper.topItem(dtsStack);
+
+      if (topDts && helper.isArrCreateNode(topDts)) {
+        return topDts.caseName;
       }
-    },
 
-    onArrayBegin(...params) {
-      walkOffset(...params);
+      return singleTypeName.getUnicodeName(pName);
+    }
 
-      if (!helper.isEmpty(dtsStack)) {
-        const topNode = helper.topItem(dtsStack);
+    return singleTypeName.getUnicodeName(pName);
+  }
 
-        if (helper.isArrCreateNode(topNode)) {
-          dtsStack.push((type: dtsDom.Type) => dtsDom.create.array(type));
-        } else if (helper.isInterfaceNode(topNode)) {
-          dtsStack.push((type: dtsDom.Type) =>
-            addComment(
-              dtsDom.create.property(
-                nameStack.pop()!,
-                dtsDom.create.array(type),
+  visit(
+    jsonc,
+    {
+      onObjectBegin(...params) {
+        walkOffset(...params);
+
+        const pName = getName();
+        const casePName = getCaseName(pName);
+        const iDec = dtsDom.create.interface(casePName);
+
+        walkTopDts({
+          onGenArrTypeFn(topDts) {
+            topDts.childrenType.add(casePName as dtsDom.Type);
+            topDts.jsDocComments.push(...popAllComments());
+
+            // 对于数组对象元素有注释，则对象加上注释，且数组属性加上注释
+            if (topDts.jsDocComments.length > 0) {
+              iDec.jsDocComment = topDts.jsDocComments.join('\n');
+            }
+          },
+          onDts(topDts) {
+            topDts.members.push(
+              addComment(
+                dtsDom.create.property(pName, casePName as dtsDom.Type),
               ),
-            ),
-          );
-        }
-      }
-    },
-    onArrayEnd(...params) {
-      walkOffset(...params);
+            );
+          },
+        });
 
-      if (!helper.isEmpty(dtsStack)) {
-        const createTypeFn = dtsStack.pop() as HalfCreateTypeFn;
-        const childTypes = arrItemMap.get(createTypeFn);
-        let nodeType!: dtsDom.PropertyDeclaration | dtsDom.ArrayTypeReference;
+        // 推入 interface
+        dtsStack.push(iDec);
+      },
+      onObjectEnd(...params) {
+        walkOffset(...params);
+        const topDts = dtsStack.pop() as dtsDom.InterfaceDeclaration;
+        const nowTopDts = helper.topItem(dtsStack);
 
-        if (childTypes.length === 1) {
-          nodeType = createTypeFn(childTypes[0]);
-        } else if (childTypes.length > 1) {
-          nodeType = createTypeFn(dtsDom.create.union(childTypes));
+        if (nowTopDts && helper.isArrCreateNode(nowTopDts)) {
+          nowTopDts.childrenIDec.add(topDts);
         } else {
-          nodeType = dtsDom.create.array(dtsDom.type.any);
+          result.push(topDts);
         }
+      },
 
-        const topNode = helper.topItem(dtsStack);
+      onArrayBegin(...params) {
+        walkOffset(...params);
 
-        if (helper.isArrCreateNode(topNode)) {
-          arrItemMap.add(
-            topNode as HalfCreateTypeFn,
-            nodeType as dtsDom.ArrayTypeReference,
-          );
-        } else if (helper.isInterfaceNode(topNode)) {
-          if (commentsMap.get(createTypeFn).length > 0) {
-            (nodeType as dtsDom.PropertyDeclaration).jsDocComment = commentsMap
-              .get(createTypeFn)
-              .join('\n');
+        const genArrType = new ArrayType();
+
+        walkTopDts({
+          onGenArrTypeFn(dts) {
+            genArrType.name = dts.name;
+            genArrType.type = 'arrItem';
+          },
+          onDts() {
+            genArrType.name = nameStack.pop() || '';
+            genArrType.type = 'property';
+            genArrType.jsDocComments.push(...popAllComments());
+          },
+        });
+        genArrType.caseName = singleTypeName.getUnicodeName(genArrType.name);
+        dtsStack.push(genArrType);
+      },
+      onArrayEnd(...params) {
+        walkOffset(...params);
+
+        if (!helper.isEmpty(dtsStack)) {
+          const genArrType = dtsStack.pop() as ArrayType;
+          const nodeType = genArrType.emit();
+
+          // 获取现在的顶部元素
+          const topDts = helper.topItem(dtsStack);
+
+          if (helper.isArrCreateNode(topDts)) {
+            // 顶部是 ArrayType 的话，nodeType 一定是 ArrayTypeReference
+            topDts.childrenType.add(nodeType as dtsDom.ArrayTypeReference);
+          } else if (helper.isInterfaceNode(topDts)) {
+            // 顶部是 InterfaceDeclaration 的话，nodeType 一定是 PropertyDeclaration
+            (topDts as dtsDom.InterfaceDeclaration).members.push(
+              nodeType as dtsDom.PropertyDeclaration,
+            );
           }
-          (topNode as dtsDom.InterfaceDeclaration).members.push(
-            nodeType as dtsDom.PropertyDeclaration,
-          );
+
+          // merge array object Item
+          if ([...genArrType.childrenIDec].length > 0) {
+            result.push(mergeInterfaceDec([...genArrType.childrenIDec]));
+          }
+        }
+      },
+      onObjectProperty(property: string, ...params) {
+        walkOffset(...params);
+
+        nameStack.push(property);
+      },
+      onLiteralValue(value: any, ...params) {
+        walkOffset(...params);
+
+        if (!helper.isEmpty(dtsStack)) {
+          const dts = helper.topItem(dtsStack);
+
+          if (helper.isArrCreateNode(dts)) {
+            dts.childrenType.add(typeof value as dtsDom.Type);
+          } else if (helper.isInterfaceNode(dts)) {
+            const propertyDec = dtsDom.create.property(
+              nameStack.pop()!,
+              typeof value as dtsDom.Type,
+            );
+
+            (dts as dtsDom.InterfaceDeclaration).members.push(
+              addComment(propertyDec),
+            );
+          }
+        }
+      },
+      onSeparator(charcter: string, ...params) {
+        walkOffset(...params);
+      },
+      onComment(...params) {
+        const comment = jsonc.substr(
+          preOffset,
+          helper.add(...params) - preOffset,
+        );
+
+        const commentResult = jsoncComment.parser(comment);
+
+        comments.push(...commentResult.content);
+
+        if (
+          commentResult.kind === jsoncComment.CommentKind.Trailing &&
+          helper.topItem(dtsStack)
+        ) {
+          addComment(helper.topItem(
+            (helper.topItem(dtsStack) as dtsDom.InterfaceDeclaration).members,
+          ) as dtsDom.PropertyDeclaration);
         }
 
-        // merge array object Item
-        const arrItemIList = arrItemIMap.get(createTypeFn);
-
-        if (arrItemIList.length > 0) {
-          result.push(mergeInterfaceDec(arrItemIList));
-        }
-      }
+        walkOffset(...params);
+      },
+      onError(error: ParseErrorCode, ...params) {
+        walkOffset(...params);
+      },
     },
-    onObjectProperty(property: string, ...params) {
-      walkOffset(...params);
-
-      nameStack.push(property);
-    },
-    onLiteralValue(value: any, ...params) {
-      walkOffset(...params);
-
-      if (!helper.isEmpty(dtsStack)) {
-        const topNode = helper.topItem(dtsStack);
-
-        if (helper.isArrCreateNode(topNode)) {
-          arrItemMap.add(
-            topNode as HalfCreateTypeFn,
-            typeof value as dtsDom.Type,
-          );
-        } else if (helper.isInterfaceNode(topNode)) {
-          const propertyNode = dtsDom.create.property(
-            nameStack.pop()!,
-            typeof value as dtsDom.Type,
-          );
-
-          (topNode as dtsDom.InterfaceDeclaration).members.push(
-            addComment(propertyNode),
-          );
-        }
-      }
-    },
-    onSeparator(charcter: string, ...params) {
-      walkOffset(...params);
-    },
-    onComment(...params) {
-      const comment = jsonc.substr(
-        preOffset,
-        helper.add(...params) - preOffset,
-      );
-
-      const commentResult = jsoncComment.parser(comment);
-
-      comments.push(...commentResult.content);
-
-      if (
-        commentResult.kind === jsoncComment.CommentKind.Trailing &&
-        helper.topItem(dtsStack)
-      ) {
-        addComment(helper.topItem(
-          (helper.topItem(dtsStack) as dtsDom.InterfaceDeclaration).members,
-        ) as dtsDom.PropertyDeclaration);
-      }
-
-      walkOffset(...params);
-    },
-    onError(error: ParseErrorCode, ...params) {
-      walkOffset(...params);
-    },
-  });
+    options,
+  );
 
   return result;
 }

@@ -1,14 +1,15 @@
 import * as dtsDom from 'dts-dom';
+import { ParseOptions } from 'jsonc-parser';
 import parser from './jsoncParser';
 
-export function typeofJsonc(
+function typeofJsonc(
   jsonc: string,
   name: string = 'IRootType',
-  options?: dtsDom.EmitOptions,
+  options?: Partial<dtsDom.EmitOptions & ParseOptions>,
 ): string {
-  return parser(jsonc, name)
+  return parser(jsonc, name, options)
     .map(d => dtsDom.emit(d, options))
     .join('\n');
 }
 
-export default { parser, typeof: typeofJsonc };
+export { parser, typeofJsonc };
