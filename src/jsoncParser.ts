@@ -1,12 +1,11 @@
 import * as dtsDom from 'dts-dom';
 import { visit, ParseErrorCode } from 'jsonc-parser';
-import * as changeCase from 'change-case';
-
 import MapSet from './mapSet';
 import * as helper from './helper';
 import * as jsoncComment from './commentParser';
 import { HalfCreateTypeFn, StackNode, CanAddCommentNode } from './types';
 import { mergeInterfaceDec } from './mergeDec';
+import SingleName from './singleName';
 
 export default function parser(
   jsonc: string,
@@ -22,6 +21,7 @@ export default function parser(
   const arrItemMap = new MapSet<dtsDom.Type>();
   const arrItemIMap = new MapSet<dtsDom.InterfaceDeclaration>();
   const commentsMap = new MapSet<string>();
+  const singleTypeName = new SingleName();
 
   // 辅助函数
   function walkOffset(...params: number[]) {
@@ -44,7 +44,10 @@ export default function parser(
       walkOffset(...params);
 
       const objName = helper.topItem(nameStack);
-      const caseObjName = changeCase.pascalCase(objName);
+      const caseObjName = singleTypeName.getUnicodeName(
+        objName,
+        helper.whetherTopIsArr(dtsStack),
+      );
       const objDts = dtsDom.create.interface(caseObjName);
 
       if (!helper.isEmpty(dtsStack)) {

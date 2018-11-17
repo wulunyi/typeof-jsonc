@@ -30,6 +30,9 @@
           "wmPoiName": 122
         }]
       }
-    ]
+    ],
+    "poiList": [{
+      "hello": "world"
+    }]
   }
 }

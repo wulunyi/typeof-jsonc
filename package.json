@@ -25,6 +25,7 @@
     "@microsoft/tsdoc": "^0.12.2",
     "change-case": "^3.0.2",
     "dts-dom": "^3.1.0",
-    "jsonc-parser": "^2.0.2"
+    "jsonc-parser": "^2.0.2",
+    "lodash": "^4.17.11"
   }
 }
