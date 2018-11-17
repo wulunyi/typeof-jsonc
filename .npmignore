@@ -4,3 +4,9 @@ coverage
 demo
 .vscode
 .rpt2_cache
+node_modules
+.eslintignore
+.gitignore
+.prettierrc
+jest.config
+rollup.config

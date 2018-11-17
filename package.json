@@ -9,13 +9,15 @@
   "types": "types/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "release": "np"
   },
   "devDependencies": {
     "@types/change-case": "^2.3.1",
     "@types/jest": "^23.3.9",
     "@types/node": "^10.12.6",
     "jest": "^23.6.0",
+    "np": "^3.0.4",
     "rollup-plugin-typescript2": "^0.18.0",
     "ts-jest": "^23.10.4",
     "ts-node": "^7.0.1",
