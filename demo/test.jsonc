@@ -1,45 +1,11 @@
 {
-  "code": 0,
-  "msg": "success",
-  /** data aaaaa
-   * bbbb
-   * @param { Object } aaa
-   */
-  "data": {
-    "total": 2,
-    "content": [
-      // 啛啛喳喳
-      {
-        "id": 21,
-        "title": "溢价系数标题",
-        "ratio": 0.25,
-        "price": 300, //推广价格，单位分
-        "discountPrice": 75, //折扣后价格
-        "stime": 1540225950, //推广开始时间，秒级时间戳
-        "etime": 1540225950, //推广结束时间，秒级时间戳
-        "operUser": "ge",
-        "ctime": 1540225950, //创建时间
-        "utime": 1540225950, //修改时间
-        "poiList": [
-          // name
-          {
-            // id
-            "wmPoiId": 122,
-            // name
-            "wmPoiName": "ttt"
-          },
-          // id
-          {
-            "wmPoiId": 122
-          }, {
-            "wmPoiId": 122,
-            "wmPoiName": 122
-          }
-        ]
-      }
-    ],
-    "poiList": [{
-      "hello": "world"
-    }]
-  }
+  "name": "lanfeng", // this is name
+  // this is demo
+  "demo": {
+    "hello": "world"
+  },
+  /** this is arr */
+  "arr": [{
+    "age": 1
+  }, 2]
 }

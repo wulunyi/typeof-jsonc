@@ -16,12 +16,71 @@ or
 yarn add typeof-jsonc -S
 ```
 
-### API
-
-typeofJsonc(jsonc, name, options)
+### demo
 
 ```
-import { typeofJsonc } from 'typeof-jsonc';
+import * as fs from 'fs';
+import * as path from 'path';
 
-typeofJsonc('{"name": 1}', 'IRootType', { rootFlags: 1, disallowComments: false })
+import { typeofJsonc } from '../src/index';
+
+const text = fs.readFileSync(path.resolve('./demo/test.jsonc'), {
+  encoding: 'utf-8',
+});
+
+console.log(
+  typeofJsonc(text, 'IResponse', { rootFlags: 1, disallowComments: false }),
+);
+
+```
+
+test.jsonc
+
+```jsonc
+{
+  "name": "lanfeng", // this is name
+  // this is demo
+  "demo": {
+    "hello": "world"
+  },
+  /** this is arr */
+  "arr": [
+    {
+      "age": 1
+    },
+    2
+  ]
+}
+```
+
+the result
+
+```
+interface Demo {
+    hello: string;
+}
+
+
+/**
+ * this is arr
+ */
+interface Arr {
+    age: number;
+}
+
+
+interface IResponse {
+    /**
+     * this is name
+     */
+    name: string;
+    /**
+     * this is demo
+     */
+    demo: Demo;
+    /**
+     * this is arr
+     */
+    arr: (Arr | number)[];
+}
 ```
