@@ -16,16 +16,10 @@ describe('helper', () => {
   });
 
   it('isArrCreateNode', () => {
-    expect(helper.isArrCreateNode(a => dtsDom.create.property('name', a))).toBe(
-      true,
-    );
     expect(helper.isArrCreateNode(dtsDom.create.interface('name'))).toBe(false);
   });
 
   it('isInterfaceNode', () => {
     expect(helper.isInterfaceNode(dtsDom.create.interface('name'))).toBe(true);
-    expect(helper.isInterfaceNode(a => dtsDom.create.property('name', a))).toBe(
-      false,
-    );
   });
 });
