@@ -1,4 +1,5 @@
 import typescript from 'rollup-plugin-typescript2';
+import es3 from 'rollup-plugin-es3';
 
 export default {
   input: './src/index.ts',
@@ -10,5 +11,6 @@ export default {
     typescript({
       useTsconfigDeclarationDir: true,
     }),
+    es3(),
   ],
 };
