@@ -213,7 +213,9 @@ export default function parser(
 
         if (
           commentResult.kind === jsoncComment.CommentKind.Trailing &&
-          helper.topItem(dtsStack)
+          helper.topItem(dtsStack) &&
+          (helper.topItem(dtsStack) as dtsDom.InterfaceDeclaration).members
+            .length > 0
         ) {
           addComment(helper.topItem(
             (helper.topItem(dtsStack) as dtsDom.InterfaceDeclaration).members,
