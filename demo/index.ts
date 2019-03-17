@@ -9,5 +9,9 @@ const text = fs.readFileSync(path.resolve('./demo/test.jsonc'), {
 
 /* tslint:disable */
 console.log(
-  typeofJsonc(text, 'IResponse', { rootFlags: 1, disallowComments: false }),
+  typeofJsonc(text, 'IResponse', {
+    rootFlags: 1,
+    disallowComments: false,
+    export: true,
+  }),
 );
