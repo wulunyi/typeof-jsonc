@@ -1,6 +1,6 @@
 {
   "name": "typeof-jsonc",
-  "version": "1.1.1",
+  "version": "1.1.2-0",
   "description": "Convert jsonc to type of typescript",
   "main": "lib/index.js",
   "repository": "git@github.com:wulunyi/typeof-jsonc.git",
