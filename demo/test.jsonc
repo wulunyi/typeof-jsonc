@@ -1,4 +1,8 @@
 {
+  "barr": [ // aaa
+    "aaa",
+    "bbb"
+  ],
   "name": "lanfeng", // this is name
   // this is demo
   "demo": {

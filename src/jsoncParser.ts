@@ -32,10 +32,16 @@ export default function parser(
 
   function addComment<T extends CanAddCommentNode>(node: T): T {
     if (!helper.isEmpty(comments)) {
-      node.jsDocComment = [node.jsDocComment || '']
-        .concat(popAllComments())
-        .filter(coment => !!coment)
-        .join('\n');
+      // @ts-ignore
+      if (node.kind === 'arrayType') {
+        // @ts-ignore
+        node.jsDocComments.push(...popAllComments());
+      } else {
+        node.jsDocComment = [node.jsDocComment || '']
+          .concat(popAllComments())
+          .filter(coment => !!coment)
+          .join('\n');
+      }
     }
 
     return node;
@@ -211,15 +217,19 @@ export default function parser(
 
         comments.push(...commentResult.content);
 
+        const topItem = helper.topItem(dtsStack) as dtsDom.InterfaceDeclaration;
+
         if (
           commentResult.kind === jsoncComment.CommentKind.Trailing &&
-          helper.topItem(dtsStack) &&
-          (helper.topItem(dtsStack) as dtsDom.InterfaceDeclaration).members
-            .length > 0
+          topItem
         ) {
-          addComment(helper.topItem(
-            (helper.topItem(dtsStack) as dtsDom.InterfaceDeclaration).members,
-          ) as dtsDom.PropertyDeclaration);
+          if (Array.isArray(topItem.members) && topItem.members.length > 0) {
+            addComment(helper.topItem(
+              topItem.members,
+            ) as dtsDom.PropertyDeclaration);
+          } else {
+            addComment(topItem);
+          }
         }
 
         walkOffset(...params);
