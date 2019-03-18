@@ -10,7 +10,7 @@
   "scripts": {
     "test": "jest",
     "build": "rollup -c",
-    "release": "np"
+    "release": "rollup -c && np"
   },
   "publishConfig": {
     "access": "public",
