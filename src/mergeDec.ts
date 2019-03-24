@@ -1,39 +1,41 @@
 import * as dtsDom from 'dts-dom';
-import { topItem } from './helper';
+import { topTypeNode } from './helper';
 import MapSet from './mapSet';
 
-export function mergeInterfaceDec(
-  dtsList: dtsDom.InterfaceDeclaration[],
+export function mergeInterfaceTypeNodes(
+  interfaceTypeNodes: dtsDom.InterfaceDeclaration[],
   name?: string,
 ) {
-  if (dtsList.length === 0) {
+  if (interfaceTypeNodes.length === 0) {
     throw new Error('dtsList not allow empty');
   }
 
-  if (dtsList.length === 1) {
-    return topItem(dtsList);
+  if (interfaceTypeNodes.length === 1) {
+    return topTypeNode(interfaceTypeNodes);
   }
 
   const pMapSet = new MapSet<dtsDom.PropertyDeclaration>();
   const pNameSet = new Set();
 
-  dtsList.forEach(dts =>
-    dts.members.forEach(p => {
+  interfaceTypeNodes.forEach(typeNode =>
+    typeNode.members.forEach(node => {
       // 只对属性做处理
-      if (p.kind === 'property') {
-        pNameSet.add(p.name);
-        pMapSet.add(p.name, p);
+      if (node.kind === 'property') {
+        pNameSet.add(node.name);
+        pMapSet.add(node.name, node);
       }
     }),
   );
 
-  const iResult = dtsDom.create.interface(name || topItem(dtsList).name);
+  const iResult = dtsDom.create.interface(
+    name || topTypeNode(interfaceTypeNodes).name,
+  );
 
   [...pNameSet].forEach(pName => {
     const pArr = pMapSet.get(pName);
-    const mergedP = mergePropertyDec(pArr, pName);
+    const mergedP = mergePropertyTypeNodes(pArr, pName);
 
-    if (pArr.length !== dtsList.length) {
+    if (pArr.length !== interfaceTypeNodes.length) {
       mergedP.flags = dtsDom.DeclarationFlags.Optional;
     }
 
@@ -45,25 +47,25 @@ export function mergeInterfaceDec(
 
 /**
  * merge same name PropertyDeclaration
- * @param dtsList PropertyDeclaration[]
+ * @param propertyTypeNodes PropertyDeclaration[]
  */
-export function mergePropertyDec(
-  dtsList: dtsDom.PropertyDeclaration[],
+export function mergePropertyTypeNodes(
+  propertyTypeNodes: dtsDom.PropertyDeclaration[],
   name?: string,
 ): dtsDom.PropertyDeclaration {
-  if (dtsList.length === 0) {
+  if (propertyTypeNodes.length === 0) {
     throw new Error('dtsList not allow empty');
   }
 
-  if (dtsList.length === 1) {
-    return topItem(dtsList);
+  if (propertyTypeNodes.length === 1) {
+    return topTypeNode(propertyTypeNodes);
   }
 
   const typeSet = new Set();
   const jsDocSet = new Set();
   const flagsSet = new Set();
 
-  dtsList.forEach(dts => {
+  propertyTypeNodes.forEach(dts => {
     if (dts.flags) {
       flagsSet.add(dts.flags);
     }
@@ -77,12 +79,15 @@ export function mergePropertyDec(
   let ptype: dtsDom.Type = dtsDom.type.any;
 
   if (typeSet.size === 1) {
-    ptype = topItem([...typeSet]);
+    ptype = topTypeNode([...typeSet]);
   } else if (typeSet.size > 1) {
     ptype = dtsDom.create.union([...typeSet]);
   }
 
-  const pResult = dtsDom.create.property(name || topItem(dtsList).name, ptype);
+  const pResult = dtsDom.create.property(
+    name || topTypeNode(propertyTypeNodes).name,
+    ptype,
+  );
 
   if (jsDocSet.size > 0) {
     pResult.jsDocComment = [...jsDocSet].join('\n');

@@ -1,16 +1,34 @@
 import * as dtsDom from 'dts-dom';
-import { ParseOptions } from 'jsonc-parser';
 import parser from './jsoncParser';
+import { IParseOptions } from './types';
+
+const defaultOptions = {
+  prefix: '',
+  onName(name: string) {
+    return `${this.prefix}${name}`;
+  },
+  addExport: false,
+  // 向下兼容
+  export: false,
+  rootFlags: dtsDom.ContextFlags.None,
+  disallowComments: true,
+  allowTrailingComma: true,
+};
+
+export type Options = Partial<dtsDom.EmitOptions & IParseOptions>;
 
 function typeofJsonc(
   jsonc: string,
-  name: string = 'IRootType',
-  options?: Partial<dtsDom.EmitOptions & ParseOptions & { export: boolean }>,
+  name = 'RootType',
+  options?: Options,
 ): string {
-  return parser(jsonc, name, options)
+  const assignOptions = Object.assign({}, defaultOptions, options);
+
+  return parser(jsonc, name, assignOptions)
+    .reverse()
     .map(d => {
       // 支持导出写法
-      if (options && options.export) {
+      if (assignOptions.addExport || assignOptions.export) {
         return dtsDom.emit(d, options).replace('interface', 'export interface');
       }
 

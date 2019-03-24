@@ -29,13 +29,13 @@
     "tsconfig-paths": "^3.7.0",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",
-    "typescript": "^3.1.6"
+    "typescript": "^3.3.4000"
   },
   "dependencies": {
     "@microsoft/tsdoc": "^0.12.2",
     "change-case": "^3.0.2",
-    "dts-dom": "^3.1.0",
-    "jsonc-parser": "^2.0.2",
+    "dts-dom": "^3.1.1",
+    "jsonc-parser": "^2.0.3",
     "rollup": "^0.67.3"
   }
 }
