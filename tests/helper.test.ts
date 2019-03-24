@@ -12,14 +12,16 @@ describe('helper', () => {
   });
 
   it('topItem', () => {
-    expect(helper.topItem([1])).toBe(1);
+    expect(helper.topTypeNode([1])).toBe(1);
   });
 
   it('isArrCreateNode', () => {
-    expect(helper.isArrCreateNode(dtsDom.create.interface('name'))).toBe(false);
+    expect(helper.isArrayTypeNode(dtsDom.create.interface('name'))).toBe(false);
   });
 
   it('isInterfaceNode', () => {
-    expect(helper.isInterfaceNode(dtsDom.create.interface('name'))).toBe(true);
+    expect(helper.isInterfaceTypeNode(dtsDom.create.interface('name'))).toBe(
+      true,
+    );
   });
 });
