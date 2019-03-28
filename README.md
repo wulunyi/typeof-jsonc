@@ -86,3 +86,18 @@ interface IResponse {
     arr: (Arr | number)[];
 }
 ```
+
+## API
+
+### typeofJsonc(jsCode: string, name: string, options?: Options)
+
+```typescript
+interface Options {
+  /** type name prefix */
+  prefix?: string;
+  /**  customer named */
+  onName?: (name: string) => string;
+  /** Add export keywords */
+  addExport?: boolean;
+}
+```

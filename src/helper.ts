@@ -1,29 +1,31 @@
-import { StackNode } from './types';
+import { TypeNode, CanAddCommentNode } from './types';
 import * as dtsDom from 'dts-dom';
 import ArrayType from './arrayType';
 
-export function isEmpty(dts: any[]) {
-  return dts.length === 0;
+export function isEmpty<T>(typeNodeStack: T[]): typeNodeStack is [] {
+  return typeNodeStack.length === 0;
 }
 
-export function topItem<T>(dts: T[]): T {
-  return dts.slice(-1)[0]!;
+export function topTypeNode<T>(typeNodeStack: T[]): T {
+  return typeNodeStack.slice(-1)[0]!;
 }
 
-export function isArrCreateNode(node: StackNode): node is ArrayType {
-  return node.kind === 'arrayType';
+export function isArrayTypeNode(
+  node: TypeNode | CanAddCommentNode,
+): node is ArrayType {
+  return !!node && node.kind === 'arrayType';
 }
 
-export function isInterfaceNode(
-  node: StackNode,
+export function isInterfaceTypeNode(
+  node: TypeNode | CanAddCommentNode,
 ): node is dtsDom.InterfaceDeclaration {
-  return node.kind === 'interface';
+  return !!node && node.kind === 'interface';
 }
 
-export function whetherTopIsArr(arr: StackNode[]): arr is ArrayType[] {
+export function topIsArrayTypeNode(arr: TypeNode[]): arr is ArrayType[] {
   if (arr.length === 0) return false;
 
-  return isArrCreateNode(topItem(arr));
+  return isArrayTypeNode(topTypeNode(arr));
 }
 
 export function add(...params: number[]): number {

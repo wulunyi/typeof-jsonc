@@ -4,8 +4,8 @@ export default class ArrayType {
     name: string;
     caseName: string;
     type: 'arrItem' | 'property';
-    childrenType: Set<dtsDom.Type>;
-    childrenIDec: Set<dtsDom.InterfaceDeclaration>;
-    jsDocComments: string[];
+    typeMembers: Set<dtsDom.Type>;
+    typeNodeMembers: Set<dtsDom.InterfaceDeclaration>;
+    jsDocComment: string[];
     emit(): dtsDom.ArrayTypeReference | dtsDom.PropertyDeclaration;
 }

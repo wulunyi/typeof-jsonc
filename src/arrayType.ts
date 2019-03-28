@@ -6,12 +6,12 @@ export default class ArrayType {
   public name: string = '';
   public caseName: string = '';
   public type: 'arrItem' | 'property' = 'arrItem';
-  public childrenType = new Set<dtsDom.Type>();
-  public childrenIDec = new Set<dtsDom.InterfaceDeclaration>();
-  public jsDocComments: string[] = [];
+  public typeMembers = new Set<dtsDom.Type>();
+  public typeNodeMembers = new Set<dtsDom.InterfaceDeclaration>();
+  public jsDocComment: string[] = [];
 
   public emit() {
-    const ctype = genArrType([...this.childrenType]);
+    const ctype = genArrType([...this.typeMembers]);
 
     if (this.type === 'arrItem') {
       return dtsDom.create.array(ctype);
@@ -22,8 +22,8 @@ export default class ArrayType {
       dtsDom.create.array(ctype),
     );
 
-    if (this.jsDocComments.length > 0) {
-      resultType.jsDocComment = this.jsDocComments.join('\n');
+    if (this.jsDocComment.length > 0) {
+      resultType.jsDocComment = this.jsDocComment.join('\n');
     }
 
     return resultType;

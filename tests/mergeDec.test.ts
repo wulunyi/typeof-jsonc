@@ -1,4 +1,7 @@
-import { mergeInterfaceDec, mergePropertyDec } from '../src/mergeDec';
+import {
+  mergeInterfaceTypeNodes,
+  mergePropertyTypeNodes,
+} from '../src/mergeDec';
 import * as dtsDom from 'dts-dom';
 
 describe('merge test', () => {
@@ -17,13 +20,13 @@ describe('merge test', () => {
       dtsDom.create.union([dtsDom.type.string, dtsDom.type.number]),
     );
 
-    expect(mergePropertyDec([asP, anP], 'A')).toEqual(asnP);
-    expect(mergePropertyDec([asP, asP])).toEqual(asP);
-    expect(mergePropertyDec([asP, asPO])).toEqual(asPO);
-    expect(mergePropertyDec([asP, asPJSDoc])).toEqual(asPJSDoc);
-    expect(mergePropertyDec([asP])).toEqual(asP);
+    expect(mergePropertyTypeNodes([asP, anP], 'A')).toEqual(asnP);
+    expect(mergePropertyTypeNodes([asP, asP])).toEqual(asP);
+    expect(mergePropertyTypeNodes([asP, asPO])).toEqual(asPO);
+    expect(mergePropertyTypeNodes([asP, asPJSDoc])).toEqual(asPJSDoc);
+    expect(mergePropertyTypeNodes([asP])).toEqual(asP);
     try {
-      mergePropertyDec([], 'A');
+      mergePropertyTypeNodes([], 'A');
     } catch (error) {
       expect(error.message).toEqual('dtsList not allow empty');
     }
@@ -44,11 +47,11 @@ describe('merge test', () => {
       ),
     );
 
-    expect(mergeInterfaceDec([iA])).toEqual(iA);
-    expect(mergeInterfaceDec([iA, iA1])).toEqual(iA);
-    expect(mergeInterfaceDec([iA, iA2])).toEqual(iA3);
+    expect(mergeInterfaceTypeNodes([iA])).toEqual(iA);
+    expect(mergeInterfaceTypeNodes([iA, iA1])).toEqual(iA);
+    expect(mergeInterfaceTypeNodes([iA, iA2])).toEqual(iA3);
     try {
-      mergeInterfaceDec([]);
+      mergeInterfaceTypeNodes([]);
     } catch (error) {
       expect(error.message).toEqual('dtsList not allow empty');
     }

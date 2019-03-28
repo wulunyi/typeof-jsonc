@@ -1,10 +1,10 @@
-import { StackNode } from './types';
+import { TypeNode, CanAddCommentNode } from './types';
 import * as dtsDom from 'dts-dom';
 import ArrayType from './arrayType';
-export declare function isEmpty(dts: any[]): boolean;
-export declare function topItem<T>(dts: T[]): T;
-export declare function isArrCreateNode(node: StackNode): node is ArrayType;
-export declare function isInterfaceNode(node: StackNode): node is dtsDom.InterfaceDeclaration;
-export declare function whetherTopIsArr(arr: StackNode[]): arr is ArrayType[];
+export declare function isEmpty<T>(typeNodeStack: T[]): typeNodeStack is [];
+export declare function topTypeNode<T>(typeNodeStack: T[]): T;
+export declare function isArrayTypeNode(node: TypeNode | CanAddCommentNode): node is ArrayType;
+export declare function isInterfaceTypeNode(node: TypeNode | CanAddCommentNode): node is dtsDom.InterfaceDeclaration;
+export declare function topIsArrayTypeNode(arr: TypeNode[]): arr is ArrayType[];
 export declare function add(...params: number[]): number;
 export declare function genArrType(typeList: dtsDom.Type[]): dtsDom.Type;
