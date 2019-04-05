@@ -15,7 +15,8 @@
       "${workspaceRoot}/demo/index.ts",
     ],
     "env": {
-      "TS_NODE_FILES": true
+      "TS_NODE_FILES": true,
+      "TS_NODE_PROJECT": "${workspaceRoot}/tsconfig.tsnode.json"
     },
     "cwd": "${workspaceRoot}",
     "protocol": "inspector"
