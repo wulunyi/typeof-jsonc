@@ -1,8 +1,9 @@
 {
-  "editor.formatOnSave": true,
-  "tslint.autoFixOnSave": true,
-  "eslint.autoFixOnSave": true,
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
+    "editor.formatOnSave": true,
+    "tslint.autoFixOnSave": true,
+    "eslint.autoFixOnSave": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "editor.tabSize": 2
 }

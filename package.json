@@ -20,22 +20,25 @@
     "@types/change-case": "^2.3.1",
     "@types/jest": "^23.3.9",
     "@types/node": "^10.12.6",
+    "@types/prettier": "^1.16.1",
     "jest": "^23.6.0",
     "np": "^3.0.4",
     "rollup": "^1.7.0",
     "rollup-plugin-typescript2": "^0.20.1",
     "rollup-plugin-uglify": "^6.0.2",
     "ts-jest": "^23.10.4",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.0.3",
     "tsconfig-paths": "^3.7.0",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.4.1"
   },
   "dependencies": {
     "@microsoft/tsdoc": "^0.12.8",
     "change-case": "^3.0.2",
     "dts-dom": "^3.1.1",
-    "jsonc-parser": "^2.0.3"
+    "global": "^4.3.2",
+    "jsonc-parser": "^2.0.3",
+    "prettier": "^1.16.4"
   }
 }

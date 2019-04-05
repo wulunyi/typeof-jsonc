@@ -1,4 +1,5 @@
 import * as dtsDom from 'dts-dom';
+import { format } from 'prettier';
 import parser from './jsoncParser';
 import { IParseOptions } from './types';
 
@@ -23,8 +24,12 @@ function typeofJsonc(
   options?: Options,
 ): string {
   const assignOptions = Object.assign({}, defaultOptions, options);
+  const formatJsonc = format(jsonc, {
+    parser: 'json',
+    singleQuote: false,
+  });
 
-  return parser(jsonc, name, assignOptions)
+  return parser(formatJsonc, name, assignOptions)
     .reverse()
     .map(d => {
       // 支持导出写法
