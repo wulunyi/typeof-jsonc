@@ -10,9 +10,7 @@ export default {
     format: 'cjs',
   },
   external: ['dts-dom', 'jsonc-parser', '@microsoft/tsdoc', 'change-case'],
-  plugins: [{
-
-    },
+  plugins: [
     typescript({
       useTsconfigDeclarationDir: true,
     }),

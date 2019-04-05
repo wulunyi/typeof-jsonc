@@ -94,10 +94,18 @@ interface IResponse {
 ```typescript
 interface Options {
   /** type name prefix */
-  prefix?: string;
+  prefix?: string; // default ''
   /**  customer named */
   onName?: (name: string) => string;
   /** Add export keywords */
-  addExport?: boolean;
+  addExport?: boolean; // default false
+  /**
+   * Identifiers are e.g. legal variable names. They may not be reserved words
+   * None = 0,
+   * Module = 1,
+   * InAmbientNamespace = 2,
+   */
+  rootFlags?: number; // default 0
+  disallowComments?: boolean; // defalut true
 }
 ```
