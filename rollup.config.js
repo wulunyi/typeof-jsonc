@@ -8,8 +8,9 @@ export default {
   output: {
     file: 'lib/index.js',
     format: 'cjs',
+    minify: true,
   },
-  external: ['dts-dom', 'jsonc-parser', '@microsoft/tsdoc', 'change-case'],
+  external: ['dts-dom', 'jsonc-parser', '@microsoft/tsdoc', 'change-case', 'esprima'],
   plugins: [
     typescript({
       useTsconfigDeclarationDir: true,

@@ -1,5 +1,5 @@
 import * as dtsDom from 'dts-dom';
-import { format } from 'prettier';
+import { format } from './format';
 import parser from './jsoncParser';
 import { IParseOptions } from './types';
 
@@ -24,10 +24,7 @@ function typeofJsonc(
   options?: Options,
 ): string {
   const assignOptions = Object.assign({}, defaultOptions, options);
-  const formatJsonc = format(jsonc, {
-    parser: 'json',
-    singleQuote: false,
-  });
+  const formatJsonc = format(jsonc);
 
   return parser(formatJsonc, name, assignOptions)
     .reverse()
@@ -39,7 +36,7 @@ function typeofJsonc(
 
       return dtsDom.emit(d, options);
     })
-    .join('\n');
+    .join('');
 }
 
-export { parser, typeofJsonc };
+export { parser, typeofJsonc, format };

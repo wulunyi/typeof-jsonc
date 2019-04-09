@@ -3,7 +3,7 @@ import path from 'path';
 
 import { typeofJsonc } from '../src/index';
 
-const text = fs.readFileSync(path.resolve('./demo/test.jsonc'), {
+const text = fs.readFileSync(path.resolve('./demo/test'), {
   encoding: 'utf-8',
 });
 

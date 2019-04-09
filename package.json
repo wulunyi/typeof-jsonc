@@ -20,7 +20,6 @@
     "@types/change-case": "^2.3.1",
     "@types/jest": "^23.3.9",
     "@types/node": "^10.12.6",
-    "@types/prettier": "^1.16.1",
     "jest": "^23.6.0",
     "np": "^3.0.4",
     "rollup": "^1.7.0",
@@ -37,8 +36,8 @@
     "@microsoft/tsdoc": "^0.12.8",
     "change-case": "^3.0.2",
     "dts-dom": "^3.1.1",
+    "esprima": "^4.0.1",
     "global": "^4.3.2",
-    "jsonc-parser": "^2.0.3",
-    "prettier": "^1.16.4"
+    "jsonc-parser": "^2.0.3"
   }
 }

@@ -11,5 +11,7 @@
   /** this is arr */
   "arr": [{
     "age": 1
-  }, 2]
+  }, 2],
+  a: 'hello',
+  b: ['a', 'b']
 }
