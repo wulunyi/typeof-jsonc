@@ -161,11 +161,11 @@ interface Options {
 
 `Not standard jsonc or json demo`
 
-```jsonc
+```
 {
-  "name": "",
-  "age": 13,
-  "loves": ["A", "B"]
+  name: '',
+  age: 13,
+  loves: ['A', 'B']
 }
 ```
 
