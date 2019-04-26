@@ -1,13 +1,20 @@
 {
   "name": "typeof-jsonc",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Convert json or jsonc to typescript type (interface)",
   "main": "lib/index.js",
   "repository": "https://github.com/wulunyi/typeof-jsonc.git",
   "author": "wulunyi <wulunyi@meituan.com>",
   "license": "MIT",
   "types": "types/index.d.ts",
-  "keywords": ["json", "jsonc", "ts", "typescript", "types", "interface"],
+  "keywords": [
+    "json",
+    "jsonc",
+    "ts",
+    "typescript",
+    "types",
+    "interface"
+  ],
   "scripts": {
     "test": "jest",
     "build": "rollup -c",
