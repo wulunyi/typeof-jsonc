@@ -14,5 +14,6 @@ console.log(
     rootFlags: 1,
     disallowComments: false,
     addExport: true,
+    singleLineJsDocComments: true,
   }),
 );
