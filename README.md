@@ -1,6 +1,4 @@
-# typeof-jsonc
-
-[![npm version](https://badge.fury.io/js/typeof-jsonc.svg)](https://badge.fury.io/js/typeof-jsonc)
+# typeof-jsonc [![npm version](https://badge.fury.io/js/typeof-jsonc.svg)](https://badge.fury.io/js/typeof-jsonc)
 
 `typeof-jsonc` is a library for Convert json or jsonc string to typescript type (interface)
 
