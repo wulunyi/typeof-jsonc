@@ -134,7 +134,7 @@ interface Options {
 | ----------------------- | ------------------------ | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | prefix                  | string                   | ""                                   | type name prefix                                                                                                     |
 | onName                  | (name: string) => string | (name: string) => `${prefix}${name}` | Custom naming If this option set prefix will not work                                                                |
-| addExport               | boolean                  | false                                | Add export keywords                                                                                                  |
+| addExport               | boolean                  | false                                | Add export keywords, when set true rootFlags set will not work                                                       |
 | rootFlags               | number                   | 0                                    | Identifiers are e.g. legal variable names. They may not be reserved words None = 0 Module = 1 InAmbientNamespace = 2 |
 | disallowComments        | boolean                  | true                                 | Whether to prohibit the generation of comments                                                                       |
 | singleLineJsDocComments | boolean                  | false                                | Single-line display when single-line comment                                                                         |
