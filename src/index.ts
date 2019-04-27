@@ -32,7 +32,7 @@ function typeofJsonc(
             // 支持导出写法
             if (assignOptions.addExport || assignOptions.export) {
                 return dtsDom
-                    .emit(d, options)
+                    .emit(d, Object.assign({}, options, { rootFlags: 1 }))
                     .replace('interface', 'export interface');
             }
 
