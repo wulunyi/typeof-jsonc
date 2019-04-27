@@ -1,7 +1,7 @@
 import * as dtsDom from 'dts-dom';
 import { visit, ParseErrorCode } from 'jsonc-parser';
 import * as helper from './helper';
-import * as jsoncComment from './commentParser';
+import * as jsoncComment from './commentsParser';
 import { TypeNode, CanAddCommentNode, IParseOptions } from './types';
 import { mergeInterfaceTypeNodes } from './mergeDec';
 import SingleName from './singleName';

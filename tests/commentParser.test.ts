@@ -1,4 +1,4 @@
-import * as cParser from '../src/commentParser';
+import * as cParser from '../src/commentsParser';
 
 describe('test comment parser', () => {
   it('getCommentKind', () => {
@@ -34,6 +34,18 @@ describe('test comment parser', () => {
       'hello',
       'world',
     ]);
+
+    expect(
+      cParser.getJsDoc(`/*
+
+    **一段简单的 JSDoc 注释。
+
+    */`),
+    ).toEqual(['一段简单的 JSDoc 注释。']);
+
+    expect(
+      cParser.getJsDoc('/** This is a description of the foo function. */'),
+    ).toEqual(['This is a description of the foo function.']);
   });
 
   it('parser', () => {

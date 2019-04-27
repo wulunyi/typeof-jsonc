@@ -1,5 +1,3 @@
-import { TSDocParser } from '@microsoft/tsdoc';
-
 export enum CommentKind {
   Leading,
   Trailing,
@@ -42,11 +40,18 @@ export function getTrailingComment(comment: string): string[] {
   return getLineComment(comment, trailingReg);
 }
 
-export function getJsDoc(comment: string) {
-  const commentParser = new TSDocParser();
-  const result = commentParser.parseString(comment);
-
-  return result.lines.map(({ buffer, end, pos }) => buffer.slice(pos, end));
+export function getJsDoc(comment: string): string[] {
+  return comment
+    .trim()
+    .slice(2, -2)
+    .split(/\n/)
+    .map(str =>
+      str
+        .trim()
+        .replace(/^\*+/, '')
+        .trim(),
+    )
+    .filter(str => !!str.length);
 }
 
 const contentHandler: {

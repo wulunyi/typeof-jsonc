@@ -5,3 +5,4 @@ import { IParseOptions } from './types';
 export declare type Options = Partial<dtsDom.EmitOptions & IParseOptions>;
 declare function typeofJsonc(jsonc: string, name?: string, options?: Options): string;
 export { parser, typeofJsonc, format };
+export default typeofJsonc;

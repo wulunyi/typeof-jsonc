@@ -40,3 +40,5 @@ function typeofJsonc(
 }
 
 export { parser, typeofJsonc, format };
+
+export default typeofJsonc;

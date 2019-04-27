@@ -1,8 +1,8 @@
-import * as esprima from 'esprima';
+import { tokenize } from 'esprima';
 
 export function format(content: string): string {
   try {
-    const tokens = esprima.tokenize(content, { range: true });
+    const tokens = tokenize(content, { range: true });
     let result = content;
 
     // 在原来的基础上偏移量
