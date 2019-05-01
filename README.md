@@ -141,13 +141,18 @@ interface Options {
 
 ## Version
 
+### 1.1.8
+
+- Fix addExport bug
+- Pack umd and es lib
+
 ### 1.1.6
 
 - Support singleLineJsDocComments options
 
 ### 1.1.5
 
-- Not standard jsonc or json
+- Support convert not standard jsonc or json
 
 `Standard jsonc or json demo`
 

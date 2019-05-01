@@ -3,3 +3,5 @@ yarn.lock
 coverage
 .rpt2_cache
 lib
+es
+dist
