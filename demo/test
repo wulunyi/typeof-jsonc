@@ -12,6 +12,11 @@
   "arr": [{
     "age": 1
   }, 2],
+  /**
+  * Demonstrate how to modify the source code before the parser sees it.
+  *
+  * @module plugins/commentConvert
+  */
   a: 'hello',
   b: ['a', 'b']
 }

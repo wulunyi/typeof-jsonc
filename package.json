@@ -1,51 +1,53 @@
 {
-  "name": "typeof-jsonc",
-  "version": "1.1.7",
-  "description": "Convert json or jsonc to typescript type (interface)",
-  "main": "lib/index.js",
-  "repository": "https://github.com/wulunyi/typeof-jsonc.git",
-  "author": "wulunyi <wulunyi@meituan.com>",
-  "license": "MIT",
-  "types": "types/index.d.ts",
-  "keywords": [
-    "json",
-    "jsonc",
-    "ts",
-    "typescript",
-    "types",
-    "interface"
-  ],
-  "scripts": {
-    "test": "jest",
-    "build": "rollup -c",
-    "release": "rollup -c && np --any-branch"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  },
-  "devDependencies": {
-    "@types/change-case": "^2.3.1",
-    "@types/jest": "^23.3.9",
-    "@types/node": "^10.12.6",
-    "jest": "^23.6.0",
-    "np": "^3.0.4",
-    "rollup": "^1.7.0",
-    "rollup-plugin-typescript2": "^0.20.1",
-    "rollup-plugin-uglify": "^6.0.2",
-    "ts-jest": "^23.10.4",
-    "ts-node": "^8.0.3",
-    "tsconfig-paths": "^3.7.0",
-    "tslint": "^5.11.0",
-    "tslint-config-airbnb": "^5.11.0",
-    "typescript": "^3.4.1"
-  },
-  "dependencies": {
-    "@microsoft/tsdoc": "^0.12.8",
-    "change-case": "^3.0.2",
-    "dts-dom": "^3.2.0",
-    "esprima": "^4.0.1",
-    "global": "^4.3.2",
-    "jsonc-parser": "^2.0.3"
-  }
+    "name": "typeof-jsonc",
+    "version": "1.1.8-0",
+    "description": "Convert json or jsonc to typescript type (interface)",
+    "main": "lib/index.js",
+    "module": "es/index.js",
+    "repository": "https://github.com/wulunyi/typeof-jsonc.git",
+    "author": "wulunyi <wulunyi@meituan.com>",
+    "license": "MIT",
+    "types": "types/index.d.ts",
+    "keywords": [
+        "json",
+        "jsonc",
+        "ts",
+        "typescript",
+        "types",
+        "interface"
+    ],
+    "scripts": {
+        "test": "jest",
+        "build": "rollup -c",
+        "release": "rollup -c && np --any-branch"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org"
+    },
+    "devDependencies": {
+        "@types/change-case": "^2.3.1",
+        "@types/jest": "^23.3.9",
+        "@types/node": "^10.12.6",
+        "jest": "^23.6.0",
+        "np": "^3.0.4",
+        "rollup": "^1.10.1",
+        "rollup-plugin-commonjs": "^9.3.4",
+        "rollup-plugin-node-resolve": "^4.2.3",
+        "rollup-plugin-terser": "^4.0.4",
+        "rollup-plugin-typescript2": "^0.20.1",
+        "rollup-plugin-uglify": "^6.0.2",
+        "ts-jest": "^23.10.4",
+        "ts-node": "^8.0.3",
+        "tsconfig-paths": "^3.7.0",
+        "tslint": "^5.11.0",
+        "tslint-config-airbnb": "^5.11.0",
+        "typescript": "^3.4.1"
+    },
+    "dependencies": {
+        "change-case": "^3.0.2",
+        "dts-dom": "^3.2.0",
+        "esprima": "^4.0.1",
+        "jsonc-parser": "^2.0.3"
+    }
 }

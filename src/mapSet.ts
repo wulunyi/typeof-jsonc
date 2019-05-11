@@ -1,17 +1,19 @@
 export default class MapSet<T = any> {
-  private $map: Map<any, Set<T>> = new Map();
+    private $map: Map<any, Set<T>> = new Map();
 
-  public add(key: any, value: T) {
-    if (!this.$map.get(key)) {
-      this.$map.set(key, new Set());
+    public add(key: any, value: T) {
+        const cacheSet = this.$map.get(key);
+
+        if (!cacheSet) {
+            this.$map.set(key, new Set([value]));
+        } else {
+            cacheSet.add(value);
+        }
     }
 
-    this.$map.get(key)!.add(value);
-  }
+    public get(key: any): T[] {
+        const set = this.$map.get(key);
 
-  public get(key: any): T[] {
-    const set = this.$map.get(key);
-
-    return set ? [...set] : [];
-  }
+        return set ? [...set] : [];
+    }
 }

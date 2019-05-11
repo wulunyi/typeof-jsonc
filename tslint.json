@@ -13,7 +13,8 @@
     "object-literal-sort-keys": false,
     "align": false,
     "ordered-imports": false,
-    "ter-arrow-parens": [true, "as-needed"]
+    "ter-arrow-parens": [true, "as-needed"],
+    "ter-indent": [true, 4]
   },
   "rulesDirectory": [],
   "linterOptions": {
