@@ -5,7 +5,7 @@ export default class MapSet<T = any> {
         const cacheSet = this.$map.get(key);
 
         if (!cacheSet) {
-            this.$map.set(key, new Set());
+            this.$map.set(key, new Set([value]));
         } else {
             cacheSet.add(value);
         }
