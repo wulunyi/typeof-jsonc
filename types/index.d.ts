@@ -1,8 +1,8 @@
-import * as dtsDom from 'dts-dom';
-import { format } from './format';
-import parser from './jsoncParser';
-import { IParseOptions } from './types';
-export declare type Options = Partial<dtsDom.EmitOptions & IParseOptions>;
+import { ParseOptions } from 'jsonc-parser';
+import { format } from './utils';
+import { parser } from './parser';
+import { RenderOptions } from './render/types';
+export declare type Options = Partial<RenderOptions & ParseOptions>;
 declare function typeofJsonc(jsonc: string, name?: string, options?: Options): string;
 export { parser, typeofJsonc, format };
 export default typeofJsonc;

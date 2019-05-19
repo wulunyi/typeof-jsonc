@@ -5,7 +5,7 @@ export enum CommentKind {
     Other,
 }
 
-export interface IComment {
+export interface Comment {
     kind: CommentKind;
     content: string[];
 }
@@ -54,17 +54,15 @@ export function getJsDoc(comment: string): string[] {
         .filter(str => !!str.length);
 }
 
-const contentHandler: {
-    [key in CommentKind]: (comment: string) => string[]
-} = {
+const contentHandler: { [key in CommentKind]: (comment: string) => string[] } = {
     [CommentKind.Leading]: getLeadingComment,
     [CommentKind.Trailing]: getTrailingComment,
     [CommentKind.JsDoc]: getJsDoc,
     [CommentKind.Other]: (c: any) => [],
 };
 
-export function parser(comment: string): IComment {
-    const result = {} as IComment;
+export function parser(comment: string): Comment {
+    const result = {} as Comment;
 
     result.kind = getCommentKind(comment);
     result.content = contentHandler[result.kind](comment);
