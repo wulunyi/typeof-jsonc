@@ -45,6 +45,18 @@
               // dddd
               a: 123,
               b: 123
+          }, {
+              // dddd
+              a: null,
+              b: {
+                  name: 'wly'
+              }
+          }, {
+              // dddd
+              a: null,
+              b: {
+                  bbb: 'wly'
+              }
           }]
       }
   ],
@@ -60,20 +72,6 @@
               b: 'name',
               // 123
               a: 123
-          }]
-      }
-  ],
-  abc: [
-      {
-          bbList: [{
-              c: 123
-          }]
-      }
-  ],
-  abcd: [
-      {
-          bbList: [{
-              c: ''
           }]
       }
   ]

@@ -7,6 +7,8 @@ export enum TJSONC_TYPE {
     ARRAY = 'Array',
     /** 基础 */
     NORMAL = 'Normal',
+    /** 联合类型 */
+    UNION = 'Union',
 }
 
 export interface BaseTJsonc {
@@ -20,9 +22,11 @@ export interface BaseTJsonc {
     parent?: ReferenceTJsonc;
 }
 
-export type TJsonc = ArrayTJsonc | ObjectTJsonc | NormalTJsonc;
+export type TJsonc = ArrayTJsonc | ObjectTJsonc | NormalTJsonc | UnionTJsonc;
 
-export type ReferenceTJsonc = ArrayTJsonc | ObjectTJsonc;
+export type ArrayLikeTJsonc = ArrayTJsonc | UnionTJsonc;
+
+export type ReferenceTJsonc = ArrayTJsonc | ObjectTJsonc | UnionTJsonc;
 
 export interface ObjectTJsonc extends BaseTJsonc {
     type: TJSONC_TYPE.OBJECT;
@@ -31,6 +35,11 @@ export interface ObjectTJsonc extends BaseTJsonc {
 
 export interface ArrayTJsonc extends BaseTJsonc {
     type: TJSONC_TYPE.ARRAY;
+    children: TJsonc[];
+}
+
+export interface UnionTJsonc extends BaseTJsonc {
+    type: TJSONC_TYPE.UNION;
     children: TJsonc[];
 }
 
@@ -72,8 +81,23 @@ export function arrayTJsonc(name: string, parent?: ReferenceTJsonc): ArrayTJsonc
     };
 }
 
+export function unionTJsonc(name: string, parent?: ReferenceTJsonc): UnionTJsonc {
+    return {
+        name,
+        parent,
+        type: TJSONC_TYPE.UNION,
+        tagCount: 1,
+        comments: [],
+        children: [],
+    };
+}
+
 export function isArrayTJsonc(node?: TJsonc): node is ArrayTJsonc {
     return !!node && node.type === TJSONC_TYPE.ARRAY;
+}
+
+export function isUnionTJsonc(node?: TJsonc): node is UnionTJsonc {
+    return !!node && node.type === TJSONC_TYPE.UNION;
 }
 
 export function isObjectTJsonc(node?: TJsonc): node is ObjectTJsonc {
@@ -82,4 +106,8 @@ export function isObjectTJsonc(node?: TJsonc): node is ObjectTJsonc {
 
 export function isNormalTJsonc(node?: TJsonc): node is NormalTJsonc {
     return !!node && node.type === TJSONC_TYPE.NORMAL;
+}
+
+export function isArrayLikeTJsonc(node?: TJsonc): node is ArrayLikeTJsonc {
+    return !!node && (node.type === TJSONC_TYPE.ARRAY || node.type === TJSONC_TYPE.UNION);
 }

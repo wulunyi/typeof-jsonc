@@ -86,6 +86,32 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
         return node.valueType.length > 1 ? dtsDom.create.union(node.valueType) : (node.valueType[0] as dtsDom.Type);
     }
 
+    function renderUnionTJsonc(node: t.UnionTJsonc): dtsDom.UnionType {
+        const types = node.children.map(cNode => {
+            if (t.isArrayTJsonc(cNode)) {
+                return renderArrayTJsonc({
+                    ...cNode,
+                    name: `union-${node.name}`,
+                });
+            }
+
+            if (t.isObjectTJsonc(cNode)) {
+                return renderObjectTJsonc({
+                    ...cNode,
+                    name: node.name,
+                });
+            }
+
+            if (t.isUnionTJsonc(cNode)) {
+                return renderUnionTJsonc(cNode);
+            }
+
+            return renderNormalTJsonc(cNode);
+        });
+
+        return dtsDom.create.union(types);
+    }
+
     function renderArrayTJsonc(node: t.ArrayTJsonc): dtsDom.ArrayTypeReference {
         const types = node.children.map(cNode => {
             if (t.isArrayTJsonc(cNode)) {
@@ -100,6 +126,10 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
                     ...cNode,
                     name: node.name,
                 });
+            }
+
+            if (t.isUnionTJsonc(cNode)) {
+                return renderUnionTJsonc(cNode);
             }
 
             return renderNormalTJsonc(cNode);
@@ -137,6 +167,8 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
                 createProperty(cNode.name, renderObjectTJsonc(cNode));
             } else if (t.isArrayTJsonc(cNode)) {
                 createProperty(cNode.name, renderArrayTJsonc(cNode));
+            } else if (t.isUnionTJsonc(cNode)) {
+                createProperty(cNode.name, renderUnionTJsonc(cNode));
             } else {
                 createProperty(cNode.name, renderNormalTJsonc(cNode));
             }

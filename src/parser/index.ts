@@ -2,7 +2,7 @@ import { ParseOptions } from 'jsonc-parser';
 import * as dtsDom from 'dts-dom';
 import * as t from './types';
 import * as jsoncComment from './commentsParser';
-import { merge } from './merge';
+import { mergeObjectTJsoncChildren } from './merge';
 import { traverse } from './jsoncTraverse';
 import { topItem } from '../utils/index';
 
@@ -97,5 +97,5 @@ export function parser(jsonc: string, name: string, options: ParseOptions = defa
         },
     );
 
-    return merge(result);
+    return mergeObjectTJsoncChildren(result);
 }
