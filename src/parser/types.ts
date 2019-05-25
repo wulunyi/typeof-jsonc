@@ -1,5 +1,4 @@
 import * as dtsDom from 'dts-dom';
-import { isEqual } from 'lodash';
 
 export enum TJSONC_TYPE {
     /** 对象 */

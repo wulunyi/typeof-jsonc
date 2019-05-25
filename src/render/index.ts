@@ -172,5 +172,6 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
 
             return dtsDom.emit(dts);
         })
+        .reverse()
         .join('\n');
 }

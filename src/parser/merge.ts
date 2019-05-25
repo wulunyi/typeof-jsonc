@@ -1,5 +1,8 @@
-import uniq from 'lodash/uniq';
 import * as t from './types';
+
+export function uniq<T>(arr: T[]): T[] {
+    return [...new Set(arr)];
+}
 
 export function mergeNormalTJsonc(nodes: t.NormalTJsonc[]): t.NormalTJsonc {
     return nodes.slice(1).reduce((preNode, curNode) => {
@@ -11,7 +14,7 @@ export function mergeNormalTJsonc(nodes: t.NormalTJsonc[]): t.NormalTJsonc {
         }
 
         preNode.tagCount += curNode.tagCount;
-        preNode.valueType = uniq([...preNode.valueType, ...curNode.valueType]).sort();
+        preNode.valueType = uniq([...preNode.valueType, ...curNode.valueType]);
 
         return preNode;
     }, nodes[0]);
