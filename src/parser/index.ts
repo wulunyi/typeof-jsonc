@@ -15,7 +15,7 @@ export function parser(jsonc: string, name: string, options: ParseOptions = defa
     const stepsTJsoncStack: t.TJsonc[] = [];
     const commentStack: string[] = [];
 
-    function popTjsoncAndPushPopUpTjsonc() {
+    function popTJsoncAndPushStepsTJsonc() {
         const popTJsonc = tJsoncStack.pop();
 
         if (popTJsonc) {
@@ -51,7 +51,7 @@ export function parser(jsonc: string, name: string, options: ParseOptions = defa
                 stepsTJsoncStack.push(node);
             },
             onObjectEnd() {
-                popTjsoncAndPushPopUpTjsonc();
+                popTJsoncAndPushStepsTJsonc();
             },
 
             onArrayBegin(arrName: string) {
@@ -65,7 +65,7 @@ export function parser(jsonc: string, name: string, options: ParseOptions = defa
                 stepsTJsoncStack.push(node);
             },
             onArrayEnd() {
-                popTjsoncAndPushPopUpTjsonc();
+                popTJsoncAndPushStepsTJsonc();
             },
             onLiteralValue(propertyNoname: string, value: any) {
                 const node = t.normalTJsonc(propertyNoname, typeof value as dtsDom.Type, topItem(tJsoncStack));
