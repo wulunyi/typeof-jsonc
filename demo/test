@@ -40,25 +40,19 @@
       }
   ],
   list: [
-      {
-          bbList: [{
-              // dddd
-              a: 123,
-              b: 123
-          }, {
-              // dddd
-              a: null,
-              b: {
-                  name: 'wly'
-              }
-          }, {
-              // dddd
-              a: null,
-              b: {
-                  bbb: 'wly'
-              }
-          }]
-      }
+    {
+        bbList: [{
+            // bbb
+            b: 123,
+            // 123
+            a: 123
+        }, {
+            // bbb
+            b: 'name',
+            // 123
+            // a: 123
+        }]
+    }
   ],
   testList: [
       {

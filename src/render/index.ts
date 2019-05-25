@@ -1,85 +1,61 @@
 import * as t from '../parser/types';
 import * as dtsDom from 'dts-dom';
-// import * as hashJS from 'hash.js';
 import { pascalCase } from 'change-case';
 import SingleName from '../utils/singleName';
 import { RenderOptions, defaultRenderOptions } from './types';
-// import { getInterfaceDeclarationId } from './helper';
-import uniq from 'lodash/uniq';
-import mergeWith from 'lodash/mergeWith';
+import { mergeObjectJTsonc } from 'src/parser/merge';
 
 type Dts = dtsDom.InterfaceDeclaration;
 
-// function hash(content: string): string {
-//     return (hashJS as any)
-//         .sha1()
-//         .update(content)
-//         .digest('hex');
-// }
-
-function stringifyDts(dts: Dts) {
-    return JSON.stringify(dts, (key, value) => {
-        if (key === 'jsDocComment') {
-            return;
-        }
-
-        if (key === 'members') {
-            return (value as dtsDom.PropertyDeclaration[]).sort((a, b) => {
-                if (a.name > b.name) {
-                    return 1;
-                }
-
-                if (a.name < b.name) {
-                    return -1;
-                }
-
-                return 0;
-            });
-        }
-
-        return value;
-    });
-}
-
-function isEqual(aDts: Dts, bDts: Dts): boolean {
-    return stringifyDts(aDts) === stringifyDts(bDts);
-}
-
-function mergeDts(aDts: Dts, bDts: Dts) {
-    mergeWith(aDts, bDts, (aValue, bValue, pName) => {
-        if (pName === 'jsDocComment') {
-            return uniq([aValue, bValue]).join('\n');
-        }
-    });
-
-    return aDts;
+interface MapValue {
+    index: number;
+    dts: Dts;
+    node: t.ObjectTJsonc;
 }
 
 export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
     const renderOptions = Object.assign(defaultRenderOptions(), options);
     const result: Dts[] = [];
-    const singleDtsName = new SingleName();
-    const resultMap = new Map<string, Dts>();
+    const singleTypeName = new SingleName();
+    const resultMap = new Map<string, MapValue>();
 
-    function pushDtsToResult(name: string, dts: Dts) {
-        const uniName = singleDtsName.getUnicodeName(name);
+    function pushDtsToResult(name: string, dts: Dts, node: t.ObjectTJsonc) {
+        const typeName = singleTypeName.getUnicodeName(name);
 
-        if (resultMap.has(name)) {
+        const savedMapValue = resultMap.get(name);
+
+        if (savedMapValue) {
             // 同名同结构合并
-            if (isEqual(resultMap.get(name)!, dts)) {
-                mergeDts(resultMap.get(name)!, dts);
+            if (t.isSameStructObjectTJsonc(savedMapValue.node, node)) {
+                // 清除之前生成的记录
+                resultMap.delete(name);
+                result.splice(savedMapValue.index, 1);
+
+                // if (
+                //     savedMapValue.node.parent !== node.parent &&
+                //     t.isSameStructTJsonc(savedMapValue.node.parent, node.parent, false)
+                // ) {
+                //     debugger;
+                // }
+
+                renderObjectTJsonc(mergeObjectJTsonc([savedMapValue.node, node]));
 
                 return name;
             }
 
-            dts.name = uniName;
+            dts.name = typeName;
         } else {
-            resultMap.set(name, dts);
+            // 存储结构方便查找
+            resultMap.set(name, {
+                node,
+                dts,
+                index: result.length,
+            });
         }
 
-        result.unshift(dts);
+        result.push(dts);
 
-        return uniName;
+        return typeName;
     }
 
     function renderNormalTJsonc(node: t.NormalTJsonc) {
@@ -147,8 +123,8 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
     }
 
     function renderObjectTJsonc(node: t.ObjectTJsonc): dtsDom.Type {
-        const dtsName = pascalCase(renderOptions.onName(node.name));
-        const dts = dtsDom.create.interface(dtsName);
+        const typeName = pascalCase(renderOptions.onName(node.name));
+        const dts = dtsDom.create.interface(typeName);
 
         dts.jsDocComment = node.comments.join('\n');
 
@@ -180,7 +156,7 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
             return propertyTypeNode;
         });
 
-        return pushDtsToResult(dtsName, dts) as dtsDom.Type;
+        return pushDtsToResult(typeName, dts, node) as dtsDom.Type;
     }
 
     renderObjectTJsonc(root);

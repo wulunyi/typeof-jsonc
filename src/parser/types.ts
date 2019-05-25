@@ -1,4 +1,5 @@
 import * as dtsDom from 'dts-dom';
+import { isEqual } from 'lodash';
 
 export enum TJSONC_TYPE {
     /** 对象 */
@@ -110,4 +111,88 @@ export function isNormalTJsonc(node?: TJsonc): node is NormalTJsonc {
 
 export function isArrayLikeTJsonc(node?: TJsonc): node is ArrayLikeTJsonc {
     return !!node && (node.type === TJSONC_TYPE.ARRAY || node.type === TJSONC_TYPE.UNION);
+}
+
+/**
+ * 判断是否相同结构，但要求只允许 root name 不同
+ * @param aNode
+ * @param bNode
+ * @param sameName
+ */
+export function isSameStructTJsonc(aNode: TJsonc | undefined, bNode: TJsonc | undefined, sameName = true): boolean {
+    if (aNode === undefined || bNode === undefined) return false;
+
+    if (isObjectTJsonc(aNode) && isObjectTJsonc(bNode)) return isSameStructObjectTJsonc(aNode, bNode, sameName);
+    if (isNormalTJsonc(aNode) && isNormalTJsonc(bNode)) return isSameStructNormalTJsonc(aNode, bNode, sameName);
+    if (isArrayTJsonc(aNode) && isArrayTJsonc(bNode)) return isSameStructArrayLikeTJsonc(aNode, bNode, sameName);
+    if (isUnionTJsonc(aNode) && isUnionTJsonc(bNode)) return isSameStructArrayLikeTJsonc(aNode, bNode, sameName);
+
+    return false;
+}
+
+export function isSameStructObjectTJsonc(aNode: ObjectTJsonc, bNode: ObjectTJsonc, sameName = true): boolean {
+    if (sameName && aNode.name !== bNode.name) return false;
+
+    if (aNode.children.length !== bNode.children.length) return false;
+
+    return aNode.children.every(cANode => {
+        const cBNode = bNode.children.find(node => node.name === cANode.name);
+
+        if (!cBNode) return false;
+
+        if (isObjectTJsonc(cANode) && isObjectTJsonc(cBNode)) return isSameStructObjectTJsonc(cANode, cBNode);
+        if (isNormalTJsonc(cANode) && isNormalTJsonc(cBNode)) return isSameStructNormalTJsonc(cANode, cBNode);
+        if (isArrayTJsonc(cANode) && isArrayTJsonc(cBNode)) return isSameStructArrayLikeTJsonc(cANode, cBNode);
+        if (isUnionTJsonc(cANode) && isUnionTJsonc(cBNode)) return isSameStructArrayLikeTJsonc(cANode, cBNode);
+
+        return false;
+    });
+}
+
+export function isSameStructNormalTJsonc(aNode: NormalTJsonc, bNode: NormalTJsonc, sameName = true): boolean {
+    if ((sameName && aNode.name !== bNode.name) || aNode.valueType.length !== bNode.valueType.length) return false;
+
+    return aNode.valueType.every(aTypeValue => {
+        const bTypeValue = bNode.valueType.find(typeValue => typeValue === aTypeValue);
+
+        return !!bTypeValue;
+    });
+}
+
+export function isSameStructArrayLikeTJsonc<T extends ArrayTJsonc | UnionTJsonc>(
+    aNode: T,
+    bNode: T,
+    sameName = true,
+): boolean {
+    if ((sameName && aNode.name !== bNode.name) || aNode.children.length !== bNode.children.length) return false;
+
+    return aNode.children.every(cANode => {
+        if (isArrayTJsonc(aNode)) {
+            const cBNode = bNode.children.find(node => node.type === cANode.type);
+
+            if (!cBNode) return false;
+
+            if (isObjectTJsonc(cANode) && isObjectTJsonc(cBNode)) return isSameStructObjectTJsonc(cANode, cBNode);
+            if (isNormalTJsonc(cANode) && isNormalTJsonc(cBNode)) return isSameStructNormalTJsonc(cANode, cBNode);
+            if (isArrayTJsonc(cANode) && isArrayTJsonc(cBNode)) return isSameStructArrayLikeTJsonc(cANode, cBNode);
+            if (isUnionTJsonc(cANode) && isUnionTJsonc(cBNode)) return isSameStructArrayLikeTJsonc(cANode, cBNode);
+
+            return false;
+        }
+
+        if (isUnionTJsonc(aNode)) {
+            const cBNode = bNode.children.find(node => node.name === cANode.name);
+
+            if (!cBNode) return false;
+
+            if (isObjectTJsonc(cANode) && isObjectTJsonc(cBNode)) return isSameStructObjectTJsonc(cANode, cBNode);
+            if (isNormalTJsonc(cANode) && isNormalTJsonc(cBNode)) return isSameStructNormalTJsonc(cANode, cBNode);
+            if (isArrayTJsonc(cANode) && isArrayTJsonc(cBNode)) return isSameStructArrayLikeTJsonc(cANode, cBNode);
+            if (isUnionTJsonc(cANode) && isUnionTJsonc(cBNode)) return isSameStructArrayLikeTJsonc(cANode, cBNode);
+
+            return false;
+        }
+
+        return false;
+    });
 }
