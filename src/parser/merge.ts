@@ -5,30 +5,30 @@ export function uniq<T>(arr: T[]): T[] {
 }
 
 export function mergeNormalTJsonc(nodes: t.NormalTJsonc[]): t.NormalTJsonc {
-    return nodes.slice(1).reduce((preNode, curNode) => {
+    return nodes.slice(1).reduce((mergedNode, curNode) => {
         // 数组单普通项，直接把注释给到数组本身
-        if (t.isArrayTJsonc(preNode.parent)) {
-            preNode.parent.comments.push(...preNode.comments.splice(0));
+        if (t.isArrayTJsonc(mergedNode.parent)) {
+            mergedNode.parent.comments.push(...mergedNode.comments.splice(0));
         } else {
-            preNode.comments = uniq([...preNode.comments, ...curNode.comments]);
+            mergedNode.comments = uniq([...mergedNode.comments, ...curNode.comments]);
         }
 
-        preNode.tagCount += curNode.tagCount;
-        preNode.valueType = uniq([...preNode.valueType, ...curNode.valueType]);
+        mergedNode.tagCount += curNode.tagCount;
+        mergedNode.valueType = uniq([...mergedNode.valueType, ...curNode.valueType]);
 
-        return preNode;
+        return mergedNode;
     }, nodes[0]);
 }
 
 export function mergeObjectJTsonc(nodes: t.ObjectTJsonc[]): t.ObjectTJsonc {
     return mergeObjectTJsoncChildren(
-        nodes.slice(1).reduce((resultNode, curNode) => {
-            resultNode.tagCount += curNode.tagCount;
-            resultNode.comments = uniq([...resultNode.comments, ...curNode.comments]);
+        nodes.slice(1).reduce((mergedNode, curNode) => {
+            mergedNode.tagCount += curNode.tagCount;
+            mergedNode.comments = uniq([...mergedNode.comments, ...curNode.comments]);
 
             const map = new Map<string, t.TJsonc>();
 
-            resultNode.children.concat(curNode.children).forEach(childNode => {
+            mergedNode.children.concat(curNode.children).forEach(childNode => {
                 const savedNode = map.get(childNode.name);
 
                 if (!savedNode) return map.set(childNode.name, childNode);
@@ -44,7 +44,7 @@ export function mergeObjectJTsonc(nodes: t.ObjectTJsonc[]): t.ObjectTJsonc {
                     savedNode.tagCount += childNode.tagCount;
                     map.set(childNode.name, mergeArrayLikeTJsoncChildren(savedNode));
                 } else {
-                    const unionTjsonc = t.unionTJsonc(childNode.name, resultNode);
+                    const unionTjsonc = t.unionTJsonc(childNode.name, mergedNode);
 
                     unionTjsonc.tagCount = childNode.tagCount + savedNode.tagCount;
                     savedNode.parent = unionTjsonc;
@@ -56,9 +56,9 @@ export function mergeObjectJTsonc(nodes: t.ObjectTJsonc[]): t.ObjectTJsonc {
                 }
             });
 
-            resultNode.children = [...map.values()];
+            mergedNode.children = [...map.values()];
 
-            return resultNode;
+            return mergedNode;
         }, nodes[0]),
     );
 }
@@ -69,13 +69,13 @@ export function mergeArrayLikeTJsonc<T extends t.ArrayLikeTJsonc>(nodes: T[]): T
     }
 
     return mergeArrayLikeTJsoncChildren(
-        nodes.slice(1).reduce((preNode, curNode) => {
-            preNode.tagCount += curNode.tagCount;
-            preNode.comments = uniq([...preNode.comments, ...curNode.comments]);
+        nodes.slice(1).reduce((mergedNode, curNode) => {
+            mergedNode.tagCount += curNode.tagCount;
+            mergedNode.comments = uniq([...mergedNode.comments, ...curNode.comments]);
 
-            preNode.children.push(...curNode.children);
+            mergedNode.children.push(...curNode.children);
 
-            return preNode;
+            return mergedNode;
         }, nodes[0]),
     );
 }

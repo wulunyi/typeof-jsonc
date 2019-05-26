@@ -68,5 +68,13 @@
               a: 123
           }]
       }
-  ]
+  ],
+  sameStruct: {
+      // hello
+      name: 'wly'
+  },
+  sameBStruce: {
+      // world
+      name: 'bhy'
+  }
 }
