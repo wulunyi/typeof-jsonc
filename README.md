@@ -8,6 +8,7 @@
 
 - Basic types
 - Array types (support auto merge)
+- Same struct auto merge
 - Comments
 - JsDocComments
 - Custom naming
@@ -140,6 +141,11 @@ interface Options {
 | singleLineJsDocComments | boolean                  | false                                | Single-line display when single-line comment                                                                         |
 
 ## Version
+
+### 1.1.9
+
+- Implementation refactor
+- Same struct auto merge
 
 ### 1.1.8
 
