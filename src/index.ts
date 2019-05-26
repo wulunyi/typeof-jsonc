@@ -7,7 +7,9 @@ import { RenderOptions } from './render/types';
 export type Options = Partial<RenderOptions & ParseOptions>;
 
 function typeofJsonc(jsonc: string, name = 'RootType', options?: Options): string {
-    return render(parser(format(jsonc), name, options), options);
+    const ast = parser(format(jsonc), name, options);
+
+    return render(ast, options);
 }
 
 export { parser, typeofJsonc, format };

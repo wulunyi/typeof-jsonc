@@ -47,13 +47,14 @@ export declare function isUnionTJsonc(node?: TJsonc): node is UnionTJsonc;
 export declare function isObjectTJsonc(node?: TJsonc): node is ObjectTJsonc;
 export declare function isNormalTJsonc(node?: TJsonc): node is NormalTJsonc;
 export declare function isArrayLikeTJsonc(node?: TJsonc): node is ArrayLikeTJsonc;
+export declare function getObjectTJsoncId(node: ObjectTJsonc): string;
 /**
  * 判断是否相同结构，但要求只允许 root name 不同
  * @param aNode
  * @param bNode
  * @param sameName
  */
-export declare function isSameStructTJsonc(aNode: TJsonc | undefined, bNode: TJsonc | undefined, sameName?: boolean): boolean;
-export declare function isSameStructObjectTJsonc(aNode: ObjectTJsonc, bNode: ObjectTJsonc, sameName?: boolean): boolean;
-export declare function isSameStructNormalTJsonc(aNode: NormalTJsonc, bNode: NormalTJsonc, sameName?: boolean): boolean;
-export declare function isSameStructArrayLikeTJsonc<T extends ArrayTJsonc | UnionTJsonc>(aNode: T, bNode: T, sameName?: boolean): boolean;
+export declare function sameTJsoncStruct(aNode: TJsonc | undefined, bNode: TJsonc | undefined, sameName?: boolean): boolean;
+export declare function sameObjectTJsoncStruct(aNode: ObjectTJsonc, bNode: ObjectTJsonc, sameName?: boolean): boolean;
+export declare function sameNormalTJsoncStruct(aNode: NormalTJsonc, bNode: NormalTJsonc, sameName?: boolean): boolean;
+export declare function sameArrayLikeTJsoncStruct<T extends ArrayTJsonc | UnionTJsonc>(aNode: T, bNode: T, sameName?: boolean): boolean;

@@ -175,7 +175,7 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
     }
 
     function renderObjectTJsonc(node: t.ObjectTJsonc): dtsDom.Type {
-        const typeName = pascalCase(renderOptions.onName(node.name));
+        const typeName = renderOptions.onName(pascalCase(node.name));
         const dts = dtsDom.create.interface(typeName);
 
         dts.jsDocComment = node.comments.join('\n');
@@ -217,18 +217,18 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
         .map(dts => {
             if (!isHolderDts(dts)) {
                 // 支持导出写法
-                if (renderOptions.addExport) {
+                if (renderOptions.addExport || renderOptions.export) {
                     return dtsDom
                         .emit(dts, Object.assign({}, options, { rootFlags: 1 }))
                         .replace('interface', 'export interface');
                 }
 
-                return dtsDom.emit(dts);
+                return dtsDom.emit(dts, renderOptions);
             }
 
             return '';
         })
         .filter(str => !!str)
         .reverse()
-        .join('\n');
+        .join('');
 }

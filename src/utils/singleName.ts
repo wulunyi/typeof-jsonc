@@ -1,5 +1,3 @@
-import { pascalCase } from 'change-case';
-
 function addSuffix(name: string) {
     const prefixReg = /\_(\d+)$/;
 
@@ -20,6 +18,6 @@ export default class SingleName {
 
         this.$nameSet.add(name);
 
-        return pascalCase(name);
+        return name;
     }
 }

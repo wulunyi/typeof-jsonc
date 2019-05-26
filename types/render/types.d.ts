@@ -6,6 +6,8 @@ export interface RenderOptions extends EmitOptions {
     onName: (name: string) => string;
     /** 添加 export 导出 */
     addExport: boolean;
+    /** 向下兼容 */
+    export: boolean;
 }
 export declare function defaultRenderOptions(): {
     prefix: string;

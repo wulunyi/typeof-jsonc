@@ -7,7 +7,6 @@ const text = fs.readFileSync(path.resolve('./demo/test'), {
     encoding: 'utf-8',
 });
 
-const start = Date.now();
 /* tslint:disable */
 console.log(
     typeofJsonc(text, 'Response', {

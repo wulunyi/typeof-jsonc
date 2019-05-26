@@ -97,5 +97,5 @@ export function parser(jsonc: string, name: string, options: ParseOptions = defa
         },
     );
 
-    return mergeObjectTJsoncChildren(result);
+    return mergeObjectTJsoncChildren(result || t.objectTJsonc(name));
 }
