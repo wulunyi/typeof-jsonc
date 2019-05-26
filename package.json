@@ -1,6 +1,6 @@
 {
     "name": "typeof-jsonc",
-    "version": "1.1.8",
+    "version": "1.1.9",
     "description": "Convert json or jsonc to typescript type (interface)",
     "main": "lib/index.js",
     "module": "es/index.js",
@@ -42,12 +42,13 @@
         "tsconfig-paths": "^3.7.0",
         "tslint": "^5.11.0",
         "tslint-config-airbnb": "^5.11.0",
-        "typescript": "^3.4.1"
+        "typescript": "^3.4.5"
     },
     "dependencies": {
         "change-case": "^3.0.2",
         "dts-dom": "^3.2.0",
         "esprima": "^4.0.1",
-        "jsonc-parser": "^2.0.3"
+        "hash.js": "^1.1.7",
+        "jsonc-parser": "^2.1.0"
     }
 }

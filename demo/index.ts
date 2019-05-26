@@ -9,7 +9,7 @@ const text = fs.readFileSync(path.resolve('./demo/test'), {
 
 /* tslint:disable */
 console.log(
-    typeofJsonc(text, 'IResponse', {
+    typeofJsonc(text, 'Response', {
         prefix: 'I',
         rootFlags: 0,
         disallowComments: false,

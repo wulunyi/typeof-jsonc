@@ -1,13 +1,13 @@
-{
+{ // program
   "barr": [ // aaa
     "aaa",
     "bbb"
   ],
   "name": "lanfeng", // this is name
   // this is demo
-  "demo": {
+  "demo": { // demo
     "hello": "world"
-  },
+  }, // this.test
   /** this is arr */
   "arr": [{
     "age": 1
@@ -18,5 +18,63 @@
   * @module plugins/commentConvert
   */
   a: 'hello',
-  b: ['a', 'b']
+  b: ['a', 'b'],
+  aaaList: [
+      {
+          enen: 'wly',
+          aaa: '12',
+          bbList: [{
+              // aaaa
+              a: 123,
+              b: 'name'
+          }]
+      },
+      {
+          enen: 'wly',
+          bb: 'cc',
+          bbList: [{
+              // cccc
+              a: 123,
+              b: 123,
+          }]
+      }
+  ],
+  list: [
+    {
+        bbList: [{
+            // bbb
+            b: 123,
+            // 123
+            a: 123
+        }, {
+            // bbb
+            b: 'name',
+            // 123
+            // a: 123
+        }]
+    }
+  ],
+  testList: [
+      {
+          bbList: [{
+              // bbb
+              b: 123,
+              // 123
+              a: 123
+          }, {
+              // bbb
+              b: 'name',
+              // 123
+              a: 123
+          }]
+      }
+  ],
+  sameStruct: {
+      // hello
+      name: 'wly'
+  },
+  sameBStruce: {
+      // world
+      name: 'bhy'
+  }
 }
