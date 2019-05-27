@@ -48,7 +48,6 @@
         "change-case": "^3.0.2",
         "dts-dom": "^3.2.0",
         "esprima": "^4.0.1",
-        "hash.js": "^1.1.7",
         "jsonc-parser": "^2.1.0"
     }
 }
