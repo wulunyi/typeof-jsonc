@@ -29,7 +29,7 @@
         "@types/change-case": "^2.3.1",
         "@types/jest": "^23.3.9",
         "@types/node": "^10.12.6",
-        "jest": "^23.6.0",
+        "jest": "^24.8.0",
         "np": "^3.0.4",
         "rollup": "^1.10.1",
         "rollup-plugin-commonjs": "^9.3.4",
