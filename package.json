@@ -1,6 +1,6 @@
 {
     "name": "typeof-jsonc",
-    "version": "1.1.9",
+    "version": "1.1.10",
     "description": "Convert json or jsonc to typescript type (interface)",
     "main": "lib/index.js",
     "module": "es/index.js",
@@ -19,11 +19,20 @@
     "scripts": {
         "test": "jest",
         "build": "rollup -c",
-        "release": "rollup -c && np --any-branch"
+        "release": "release-it",
+        "release:beta": "release-it major --preRelease=beta"
     },
     "publishConfig": {
         "access": "public",
         "registry": "https://registry.npmjs.org"
+    },
+    "hooks": {
+        "before:init": [
+            "npm run lint",
+            "npm test"
+        ],
+        "after:git:release": "npm run build",
+        "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "devDependencies": {
         "@types/change-case": "^2.3.1",
@@ -31,6 +40,7 @@
         "@types/node": "^10.12.6",
         "jest": "^24.8.0",
         "np": "^3.0.4",
+        "release-it": "^12.3.0",
         "rollup": "^1.10.1",
         "rollup-plugin-commonjs": "^9.3.4",
         "rollup-plugin-node-resolve": "^4.2.3",
