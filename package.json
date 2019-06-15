@@ -20,7 +20,7 @@
         "test": "jest",
         "build": "rollup -c",
         "release": "release-it",
-        "release:beta": "release-it major --preRelease=beta"
+        "release:beta": "release-it patch --preRelease=beta"
     },
     "publishConfig": {
         "access": "public",
