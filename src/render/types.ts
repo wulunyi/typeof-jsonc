@@ -15,7 +15,13 @@ export function defaultRenderOptions() {
     return {
         prefix: '',
         onName(name: string) {
-            return `${this.prefix}${name.replace(/(l|L)ist$/, 'Item').replace(/s$/, '')}`;
+            let finallyName = name;
+
+            if (!Number.isNaN(+name)) {
+                finallyName = `Object_${name}`;
+            }
+
+            return `${this.prefix}${finallyName.replace(/(l|L)ist$/, 'Item').replace(/s$/, '')}`;
         },
         addExport: false,
     };

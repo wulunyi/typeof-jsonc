@@ -1,4 +1,9 @@
-{ // program
+{
+    "empty": {
+        '2': { "test": 12}
+    },
+    "empty1": {},
+    // program
   "barr": [ // aaa
     "aaa",
     "bbb"

@@ -192,7 +192,11 @@ export function render(root: t.ObjectTJsonc, options?: Partial<RenderOptions>) {
             };
 
             if (t.isObjectTJsonc(cNode)) {
-                createProperty(cNode.name, renderObjectTJsonc(cNode));
+                if (cNode.children.length === 0) {
+                    createProperty(cNode.name, dtsDom.type.object);
+                } else {
+                    createProperty(cNode.name, renderObjectTJsonc(cNode));
+                }
             } else if (t.isArrayTJsonc(cNode)) {
                 createProperty(cNode.name, renderArrayTJsonc(cNode));
             } else if (t.isUnionTJsonc(cNode)) {
