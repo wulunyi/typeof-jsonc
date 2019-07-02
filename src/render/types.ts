@@ -21,7 +21,7 @@ export function defaultRenderOptions() {
                 finallyName = `Object_${name}`;
             }
 
-            return `${this.prefix}${finallyName.replace(/(l|L)ist$/, 'Item').replace(/s$/, '')}`;
+            return `${this.prefix}${finallyName}`;
         },
         addExport: false,
     };
