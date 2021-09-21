@@ -2,19 +2,21 @@
 
 `typeof-jsonc` is a library for Convert json or jsonc string to typescript type (interface)
 
-[Online Playgrounds](http://lanfeng.fun/#/typeofjsonc)
+[推荐使用 typeof-sjsonc](https://github.com/wulunyi/typeof-sjsonc)
+
+[Online Playgrounds](https://wulunyi.github.io/typeof-sjsonc-web/build/index.html)
 
 ## Support
 
-- Basic types
-- Array types (support auto merge)
-- Same struct auto merge
-- Comments
-- JsDocComments
-- Custom naming
-- Json
-- Jsonc
-- Not standard jsonc or json
+-   Basic types
+-   Array types (support auto merge)
+-   Same struct auto merge
+-   Comments
+-   JsDocComments
+-   Custom naming
+-   Json
+-   Jsonc
+-   Not standard jsonc or json
 
 ## Usage
 
@@ -36,25 +38,25 @@ yarn add typeof-jsonc -S
 
 ```jsonc
 {
-  "barr": [
-    // aaa
-    "aaa",
-    "bbb"
-  ],
-  "name": "lanfeng", // this is name
-  // this is demo
-  "demo": {
-    "hello": "world"
-  },
-  /** this is arr */
-  "arr": [
-    {
-      "age": 1
+    "barr": [
+        // aaa
+        "aaa",
+        "bbb"
+    ],
+    "name": "lanfeng", // this is name
+    // this is demo
+    "demo": {
+        "hello": "world"
     },
-    2
-  ],
-  "a": "hello",
-  "b": ["a", "b"]
+    /** this is arr */
+    "arr": [
+        {
+            "age": 1
+        },
+        2
+    ],
+    "a": "hello",
+    "b": ["a", "b"]
 }
 ```
 
@@ -67,17 +69,17 @@ import path from 'path';
 import { typeofJsonc } from '../src/index';
 
 const text = fs.readFileSync(path.resolve('./demo/test'), {
-  encoding: 'utf-8',
+    encoding: 'utf-8',
 });
 
 console.log(
-  typeofJsonc(text, 'Response', {
-    prefix: 'I',
-    rootFlags: 1,
-    disallowComments: false,
-    addExport: true,
-    singleLineJsDocComments: true,
-  }),
+    typeofJsonc(text, 'Response', {
+        prefix: 'I',
+        rootFlags: 1,
+        disallowComments: false,
+        addExport: true,
+        singleLineJsDocComments: true,
+    }),
 );
 ```
 
@@ -85,49 +87,49 @@ console.log(
 
 ```typescript
 export interface IResponse {
-  /**  aaa  */
-  barr: string[];
-  /**  this is name  */
-  name: string;
-  /**  this is demo  */
-  demo: IDemo;
-  /**  this is arr  */
-  arr: (IArr | number)[];
-  a: string;
-  b: string[];
+    /**  aaa  */
+    barr: string[];
+    /**  this is name  */
+    name: string;
+    /**  this is demo  */
+    demo: IDemo;
+    /**  this is arr  */
+    arr: (IArr | number)[];
+    a: string;
+    b: string[];
 }
 
 /**  this is arr  */
 export interface IArr {
-  age: number;
+    age: number;
 }
 
 export interface IDemo {
-  hello: string;
+    hello: string;
 }
 ```
 
 ## API
 
-- typeofJsonc(jsonc: string, name: string, options?: Options)
+-   typeofJsonc(jsonc: string, name: string, options?: Options)
 
 ```typescript
 interface Options {
-  /** type name prefix */
-  prefix?: string; // default ''
-  /**  customer named */
-  onName?: (name: string) => string;
-  /** Add export keywords */
-  addExport?: boolean; // default false
-  /**
-   * Identifiers are e.g. legal variable names. They may not be reserved words
-   * None = 0,
-   * Module = 1,
-   * InAmbientNamespace = 2,
-   */
-  rootFlags?: number; // default 0
-  disallowComments?: boolean; // defalut true
-  singleLineJsDocComments?: boolean; // default false
+    /** type name prefix */
+    prefix?: string; // default ''
+    /**  customer named */
+    onName?: (name: string) => string;
+    /** Add export keywords */
+    addExport?: boolean; // default false
+    /**
+     * Identifiers are e.g. legal variable names. They may not be reserved words
+     * None = 0,
+     * Module = 1,
+     * InAmbientNamespace = 2,
+     */
+    rootFlags?: number; // default 0
+    disallowComments?: boolean; // defalut true
+    singleLineJsDocComments?: boolean; // default false
 }
 ```
 
@@ -144,29 +146,29 @@ interface Options {
 
 ### 1.1.9
 
-- Implementation refactor
-- Same struct auto merge
+-   Implementation refactor
+-   Same struct auto merge
 
 ### 1.1.8
 
-- Fix addExport bug
-- Pack umd and es lib
+-   Fix addExport bug
+-   Pack umd and es lib
 
 ### 1.1.6
 
-- Support singleLineJsDocComments options
+-   Support singleLineJsDocComments options
 
 ### 1.1.5
 
-- Support convert not standard jsonc or json
+-   Support convert not standard jsonc or json
 
 `Standard jsonc or json demo`
 
 ```jsonc
 {
-  "name": "test",
-  "age": 13,
-  "loves": ["A", "B"]
+    "name": "test",
+    "age": 13,
+    "loves": ["A", "B"]
 }
 ```
 
